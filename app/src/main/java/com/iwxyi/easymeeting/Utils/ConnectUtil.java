@@ -1,0 +1,146 @@
+package com.iwxyi.easymeeting.Utils;
+
+/**
+ * @author: mrxy001
+ * @time: 2019.2.20
+ * 宇宙超级无敌联网类
+ * 一行搞定取网页源码问题
+ */
+
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+
+import com.iwxyi.easymeeting.Globals.Paths;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+public class ConnectUtil implements Runnable {
+
+    String path, param;
+    String method = "GET";
+    int what;
+    Handler handler;
+
+    /**
+     * 静态类工具，一行代码才可联网问题
+     * @param handler 要返回的 Handler，进行处理返回的代码
+     * @param what    返回的 what，由使用的对象来决定
+     * @param path    网址
+     * @param param   参数
+     */
+    static public void Go(Handler handler, int what, String path, String param) {
+        Thread thread = new Thread(new ConnectUtil(handler, what, Paths.getNetpath("login"), param));
+        thread.start();
+    }
+
+    static public void Go(Handler handler, int what, String path, String[] param) {
+        Thread thread = new Thread(new ConnectUtil(handler, what, Paths.getNetpath("login"), param));
+        thread.start();
+    }
+
+    static public void Go(Handler handler, String path, String param) {
+        Thread thread = new Thread(new ConnectUtil(handler, 0, Paths.getNetpath("login"), param));
+        thread.start();
+    }
+
+    static public void Go(Handler handler, String path, String param[]) {
+        Thread thread = new Thread(new ConnectUtil(handler, 0, Paths.getNetpath("login"), param));
+        thread.start();
+    }
+
+    public ConnectUtil(Handler handler, int what, String path, String param) {
+        this.handler = handler;
+        this.what = what;
+        this.path = path;
+        this.param = param;
+    }
+
+    public ConnectUtil(Handler handler, String path, String param) {
+        this(handler, 0, path, param);
+    }
+
+    public ConnectUtil(Handler handler, String path) {
+        this(handler, 0, path, "");
+    }
+
+    public ConnectUtil(Handler handler, int what, String path, String[] params) {
+
+        this(handler, what, path, "");
+
+        StringBuilder url = new StringBuilder();
+        int count = params.length;
+        for (int i = 0; i < count; i++) {
+            String str = params[i];
+            try {
+                str = URLEncoder.encode(str, "UTF-8"); // 进行网络编码
+            } catch (UnsupportedEncodingException e) {
+                str = URLEncoder.encode(str);
+            }
+            if (i % 2 == 0) {
+                if (i > 0) {
+                    url.append("&");
+                }
+                url.append(str).append("=");
+            }
+            else {
+                url.append(str);
+            }
+        }
+        param = url.toString();
+    }
+
+    public ConnectUtil(Handler handler, String path, String[] params) {
+        this(handler, 0, path, params);
+    }
+
+    public ConnectUtil post() {
+        this.method = "POST";
+        return this;
+    }
+
+    @Override
+    public void run() {
+        String result;
+        if ("POST".equals(method))
+            result = NetworkUtil.post(Paths.getNetpath("login"), param);
+        else
+            result = NetworkUtil.get(Paths.getNetpath("login"), param);
+        Message msg = new Message();
+        msg.obj = result;
+        msg.what = what;
+        handler.sendMessage(msg);
+    }
+
+    /**
+     * 判断有没有连接网络
+     * @param activity
+     * @return
+     */
+    public static boolean isConnect(Activity activity) {
+        // 获取手机所有连接管理对象（包括对wi-fi,net等连接的管理）
+        try {
+            ConnectivityManager connectivity = (ConnectivityManager) ((Activity) activity)
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivity != null) {
+                // 获取网络连接管理的对象
+                NetworkInfo info = connectivity.getActiveNetworkInfo();
+                if (info != null && info.isConnected()) {
+                    // 判断当前网络是否已经连接
+                    if (info.getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.v("====isConnect", e.toString());
+        }
+        return false;
+    }
+}
