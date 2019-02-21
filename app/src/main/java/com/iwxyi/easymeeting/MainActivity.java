@@ -3,9 +3,10 @@ package com.iwxyi.easymeeting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,12 +14,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.iwxyi.easymeeting.Fragments.LeasesFragment;
+import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent;
 import com.iwxyi.easymeeting.Globals.UserInfo;
 import com.iwxyi.easymeeting.Users.LoginActivity;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LeasesFragment.OnLeaseListInteractionListener {
+
+    private final int REQUEST_CODE_LOGIN = 1;
+    private final int RESULT_CODE_LOGIN = 1;
+    private FrameLayout mContentFl;
+
+    private LeasesFragment leasesFragment;
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +42,7 @@ public class MainActivity extends AppCompatActivity
         initView();
 
         if (!UserInfo.isLogin()) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), REQUEST_CODE_LOGIN);
         }
     }
 
@@ -53,6 +67,25 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        mContentFl = (FrameLayout) findViewById(R.id.fl_content);
+
+        View drawView = navigationView.getHeaderView(0);
+        ImageView mHeadIv = (ImageView)drawView.findViewById(R.id.iv_avatar);
+        mHeadIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (UserInfo.isLogin()) { // 用户已经登录，切换到用户信息界面
+                    //startActivityForResult(new Intent(getApplicationContext(), PersonActivity.class), REQUEST_CODE_PERSON);
+                } else {
+                    startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGIN);
+                }
+            }
+        });
+
+        fm = getSupportFragmentManager();
+        leasesFragment = new LeasesFragment();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.fl_content, leasesFragment, "leases").commit();
     }
 
     @Override
@@ -72,6 +105,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * 右上角菜单被单击
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -82,19 +120,35 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_refresh) {
+            if (leasesFragment != null) {
+                leasesFragment.refreshLeases();
+            }
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 侧滑菜单被点击
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FragmentTransaction ft = fm.beginTransaction();
+        hideFragment(ft);
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            if (leasesFragment == null) {
+                leasesFragment = new LeasesFragment();
+                ft.add(R.id.fl_content, leasesFragment, "leases");
+            } else {
+                ft.show(leasesFragment);
+            }
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -110,5 +164,25 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void hideFragment(FragmentTransaction ft) {
+        if (leasesFragment != null) {
+            ft.hide(leasesFragment);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CODE_LOGIN) { // 登录成功
+            if (leasesFragment != null) {
+                leasesFragment.refreshLeases();
+            }
+        }
+    }
+
+    @Override
+    public void onLeaseListInteraction(LeaseContent.LeaseItem item) {
+
     }
 }

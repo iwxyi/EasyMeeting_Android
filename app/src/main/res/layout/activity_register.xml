@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.iwxyi.easymeeting.Users.LoginActivity">
+    tools:context="com.iwxyi.easymeeting.Users.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="智能会议室管理系统"
+                android:text="用户注册"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"/>
         </LinearLayout>
@@ -68,6 +68,28 @@
                 android:textColorHint="#9F9FA0"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="#83738F"
+                android:layout_marginRight="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"></View>
+
+            <EditText
+                android:id="@+id/tv_repeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:hint="重复密码"
+                android:inputType="textPassword"
+                android:textColor="#9F9FA0"
+                android:textColorHint="#9F9FA0"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -82,14 +104,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="忘记密码？"
+                android:text="注册即代表您遵从本公司的"
                 android:textColor="#DDDDDD"
                 android:textSize="15sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="点这里"
+                android:text="用户协议"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"/>
         </LinearLayout>
@@ -105,17 +127,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_style"
-                android:onClick="toLogin"
-                android:text="登录"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_style"
-                android:layout_weight="1"
-                android:onClick="toRegister"
-                android:text="注册"/>
+                android:onClick="register"
+                android:text="确定注册"/>
         </LinearLayout>
 
     </LinearLayout>

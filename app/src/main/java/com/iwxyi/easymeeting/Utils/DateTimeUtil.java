@@ -17,11 +17,7 @@ public class DateTimeUtil {
     public static int getYearFromTimestamp(long timestamp) {
         if (timestamp == 0) return 0;
         String s = null;
-        try {
-            s = longToString(timestamp, "yyyy");
-        } catch (ParseException e) {
-            return 0;
-        }
+        s = longToString(timestamp, "yyyy");
         return Integer.parseInt(s);
     }
 
@@ -33,11 +29,7 @@ public class DateTimeUtil {
     public static int getMonthFromTimestamp(long timestamp) {
         if (timestamp == 0) return 0;
         String s = null;
-        try {
-            s = longToString(timestamp, "MM"); // 大写M是月份，小写m是分钟
-        } catch (ParseException e) {
-            return 0;
-        }
+        s = longToString(timestamp, "MM"); // 大写M是月份，小写m是分钟
         return Integer.parseInt(s);
     }
 
@@ -49,11 +41,7 @@ public class DateTimeUtil {
     public static int getDateFromTimestamp(long timestamp) {
         if (timestamp == 0) return 0;
         String s = null;
-        try {
-            s = longToString(timestamp, "dd");
-        } catch (ParseException e) {
-            return 0;
-        }
+        s = longToString(timestamp, "dd");
         return Integer.parseInt(s);
     }
 
@@ -65,11 +53,7 @@ public class DateTimeUtil {
     public static int getHourFromTimestamp(long timestamp) {
         if (timestamp == 0) return 0;
         String s = null;
-        try {
-            s = longToString(timestamp, "hh");
-        } catch (ParseException e) {
-            return 0;
-        }
+        s = longToString(timestamp, "hh");
         return Integer.parseInt(s);
     }
 
@@ -81,11 +65,7 @@ public class DateTimeUtil {
     public static int getMinuteFromTimestamp(long timestamp) {
         if (timestamp == 0) return 0;
         String s = null;
-        try {
-            s = longToString(timestamp, "mm");
-        } catch (ParseException e) {
-            return 0;
-        }
+        s = longToString(timestamp, "mm");
         return Integer.parseInt(s);
     }
 
@@ -97,11 +77,7 @@ public class DateTimeUtil {
     public static int getSecondFromTimestamp(long timestamp) {
         if (timestamp == 0) return 0;
         String s = null;
-        try {
-            s = longToString(timestamp, "ss");
-        } catch (ParseException e) {
-            return 0;
-        }
+        s = longToString(timestamp, "ss");
         return Integer.parseInt(s);
     }
 
@@ -156,30 +132,25 @@ public class DateTimeUtil {
             return 0;
 
         Date d = null;
-        try {
-            d = stringToDate(o, "yyyy-MM-dd HH:mm:ss");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;
-        }
+        d = stringToDate(o, "yyyy-MM-dd HH:mm:ss");
         return d.getTime();
     }
 
     // currentTime要转换的long类型的时间
     // formatType要转换的string类型的时间格式
-    public static String longToString(long currentTime, String formatType)
-            throws ParseException {
-        Date date = longToDate(currentTime, formatType); // long类型转成Date类型
+    public static String longToString(long currentTime, String formatType) {
+        Date date = null; // long类型转成Date类型
+        date = longToDate(currentTime, formatType);
         return dateToString(date, formatType);
     }
 
     // currentTime要转换的long类型的时间
     // formatType要转换的时间格式yyyy-MM-dd HH:mm:ss //yyyy年MM月dd日 HH时mm分ss秒
-    public static Date longToDate(long currentTime, String formatType)
-            throws ParseException {
+    public static Date longToDate(long currentTime, String formatType) {
         Date dateOld = new Date(currentTime); // 根据long类型的毫秒数生命一个date类型的时间
         String sDateTime = dateToString(dateOld, formatType); // 把date类型的时间转换为string
-        Date date = stringToDate(sDateTime, formatType); // 把String类型转换为Date类型
+        Date date = null; // 把String类型转换为Date类型
+        date = stringToDate(sDateTime, formatType);
         return date;
     }
 
@@ -193,11 +164,14 @@ public class DateTimeUtil {
     // strTime要转换的string类型的时间，formatType要转换的格式yyyy-MM-dd HH:mm:ss
     // yyyy年MM月dd日 HH时mm分ss秒，
     // strTime的时间格式必须要与formatType的时间格式相同
-    public static Date stringToDate(String strTime, String formatType)
-            throws ParseException {
+    public static Date stringToDate(String strTime, String formatType) {
         SimpleDateFormat formatter = new SimpleDateFormat(formatType);
         Date date = null;
-        date = formatter.parse(strTime);
+        try {
+            date = formatter.parse(strTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return date;
     }
 }

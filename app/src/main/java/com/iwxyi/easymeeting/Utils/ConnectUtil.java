@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.iwxyi.easymeeting.Globals.Paths;
 
@@ -36,22 +37,22 @@ public class ConnectUtil implements Runnable {
      * @param param   参数
      */
     static public void Go(Handler handler, int what, String path, String param) {
-        Thread thread = new Thread(new ConnectUtil(handler, what, Paths.getNetpath("login"), param));
+        Thread thread = new Thread(new ConnectUtil(handler, what, path, param));
         thread.start();
     }
 
     static public void Go(Handler handler, int what, String path, String[] param) {
-        Thread thread = new Thread(new ConnectUtil(handler, what, Paths.getNetpath("login"), param));
+        Thread thread = new Thread(new ConnectUtil(handler, what, path, param));
         thread.start();
     }
 
     static public void Go(Handler handler, String path, String param) {
-        Thread thread = new Thread(new ConnectUtil(handler, 0, Paths.getNetpath("login"), param));
+        Thread thread = new Thread(new ConnectUtil(handler, 0, path, param));
         thread.start();
     }
 
     static public void Go(Handler handler, String path, String param[]) {
-        Thread thread = new Thread(new ConnectUtil(handler, 0, Paths.getNetpath("login"), param));
+        Thread thread = new Thread(new ConnectUtil(handler, 0, path, param));
         thread.start();
     }
 
@@ -60,6 +61,7 @@ public class ConnectUtil implements Runnable {
         this.what = what;
         this.path = path;
         this.param = param;
+
     }
 
     public ConnectUtil(Handler handler, String path, String param) {
@@ -109,13 +111,14 @@ public class ConnectUtil implements Runnable {
     public void run() {
         String result;
         if ("POST".equals(method))
-            result = NetworkUtil.post(Paths.getNetpath("login"), param);
+            result = NetworkUtil.post(path, param);
         else
-            result = NetworkUtil.get(Paths.getNetpath("login"), param);
+            result = NetworkUtil.get(path, param);
         Message msg = new Message();
         msg.obj = result;
         msg.what = what;
         handler.sendMessage(msg);
+        Log.i("====connect", path + "?" + param + ">>>>" + result);
     }
 
     /**
