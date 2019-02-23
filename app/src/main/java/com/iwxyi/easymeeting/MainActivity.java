@@ -17,22 +17,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.iwxyi.easymeeting.Fragments.LeasesFragment;
 import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent;
+import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.UserInfo;
 import com.iwxyi.easymeeting.Users.LoginActivity;
+import com.iwxyi.easymeeting.Users.PersonActivity;
+import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LeasesFragment.OnLeaseListInteractionListener {
 
     private final int REQUEST_CODE_LOGIN = 1;
     private final int RESULT_CODE_LOGIN = 1;
-    private FrameLayout mContentFl;
+    private final int REQUEST_CODE_PERSON = 3;
 
+    private FrameLayout mContentFl;
     private LeasesFragment leasesFragment;
     private FragmentManager fm;
+
+    private TextView mNicknameTv;
+    private TextView mSignatureTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +51,18 @@ public class MainActivity extends AppCompatActivity
         if (!UserInfo.isLogin()) {
             startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), REQUEST_CODE_LOGIN);
         }
+
+        if (App.getInt("firstOpen") == 0) {
+            App.setVal("firstOpen", DateTimeUtil.getTimestamp());
+        }
     }
 
     private void initView() {
+        // APP Bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // FAB 按钮
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +72,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        // 抽屉控件
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -69,13 +83,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         mContentFl = (FrameLayout) findViewById(R.id.fl_content);
 
+        // 抽屉头像
         View drawView = navigationView.getHeaderView(0);
-        ImageView mHeadIv = (ImageView)drawView.findViewById(R.id.iv_avatar);
+        ImageView mHeadIv = (ImageView) drawView.findViewById(R.id.iv_avatar);
+        mNicknameTv = (TextView) drawView.findViewById(R.id.tv_nickname);
+        mSignatureTv = (TextView) drawView.findViewById(R.id.tv_signature);
         mHeadIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (UserInfo.isLogin()) { // 用户已经登录，切换到用户信息界面
-                    //startActivityForResult(new Intent(getApplicationContext(), PersonActivity.class), REQUEST_CODE_PERSON);
+                    startActivityForResult(new Intent(getApplicationContext(), PersonActivity.class), REQUEST_CODE_PERSON);
                 } else {
                     startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGIN);
                 }
@@ -178,6 +195,27 @@ public class MainActivity extends AppCompatActivity
             if (leasesFragment != null) {
                 leasesFragment.refreshLeases();
             }
+            mNicknameTv.setText(UserInfo.nickname);
+            // 设置签名，默认 公司 职位
+            String signature = "";
+            if (!UserInfo.company.isEmpty()) {
+                signature = UserInfo.company;
+            }
+            if (!UserInfo.post.isEmpty()) {
+                if (!signature.isEmpty())
+                    signature += " ";
+                signature += UserInfo.post;
+            }
+            // 设置邮箱、手机号等
+            if (signature.isEmpty()) {
+                if (!UserInfo.email.isEmpty())
+                    signature = UserInfo.email;
+                else if (!UserInfo.mobile.isEmpty())
+                    signature = UserInfo.mobile;
+                else
+                    signature = "信用度："+UserInfo.credit;
+            }
+            mSignatureTv.setText(signature);
         }
     }
 

@@ -10,6 +10,23 @@ import java.util.Date;
 public class DateTimeUtil {
 
     /**
+     * 获取时间戳
+     * @return 现行时间戳（10 位数，精确到秒）
+     */
+    public static int getTimestamp() {
+        // 获取的是 13 位数，除以 1000 来获取 10位数的时间戳
+        return (int) (System.currentTimeMillis() / 1000);
+    }
+
+    /**
+     * 获取时间戳
+     * @return 现行时间戳（13 位数，精确到毫秒）
+     */
+    public static long getMillisTimestamp() {
+        return System.currentTimeMillis();
+    }
+
+    /**
      * 时间戳转换到年
      * @param timestamp 时间戳
      * @return 年

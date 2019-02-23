@@ -13,11 +13,11 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.UserInfo;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
-import com.iwxyi.easymeeting.Utils.SettingsUtil;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class LoginActivity extends AppCompatActivity {
@@ -45,8 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         mUsernameTv = (EditText) findViewById(R.id.tv_username);
         mPasswordTv = (EditText) findViewById(R.id.tv_password);
 
-        UserInfo.username = SettingsUtil.getVal(getApplicationContext(), "username");
-        UserInfo.password = SettingsUtil.getVal(getApplicationContext(), "password");
+        UserInfo.username = App.getVal("username");
+        UserInfo.password = App.getVal("password");
         mUsernameTv.setText(UserInfo.username);
         mPasswordTv.setText(UserInfo.password);
     }
@@ -87,9 +87,9 @@ public class LoginActivity extends AppCompatActivity {
                 UserInfo.company  = StringUtil.getXml   (result, "company" );
                 UserInfo.post     = StringUtil.getXml   (result, "post"    );
 
-                SettingsUtil.setVal(getApplicationContext(), "user_id",  UserInfo.user_id );
-                SettingsUtil.setVal(getApplicationContext(), "username", UserInfo.username);
-                SettingsUtil.setVal(getApplicationContext(), "password", UserInfo.password);
+                App.setVal("user_id",  UserInfo.user_id );
+                App.setVal("username", UserInfo.username);
+                App.setVal("password", UserInfo.password);
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_CODE_LOGIN);
                 finish();

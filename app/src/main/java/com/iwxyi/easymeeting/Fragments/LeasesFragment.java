@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.UserInfo;
 import com.iwxyi.easymeeting.R;
@@ -56,6 +57,7 @@ public class LeasesFragment extends Fragment {
                     LeaseContent.addItemsFromString(msg.obj.toString());
                     adapter.setValues(LeaseContent.ITEMS);
                     adapter.notifyDataSetChanged();
+                    App.setVal("count", LeaseContent.ITEMS.size());
             }
         }
     };
@@ -84,7 +86,6 @@ public class LeasesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_leases_list, container, false);
 
-        Log.i("==== create view", "frnfiref");
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;

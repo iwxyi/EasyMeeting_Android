@@ -7,4 +7,5 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">设置</string>
     <string name="action_refresh">刷新</string>
+    <string name="title_activity_person">个人信息</string>
 </resources>
