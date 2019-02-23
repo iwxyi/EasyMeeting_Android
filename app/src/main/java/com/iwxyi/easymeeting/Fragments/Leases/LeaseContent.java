@@ -1,4 +1,4 @@
-package com.iwxyi.easymeeting.Fragments.dummy;
+package com.iwxyi.easymeeting.Fragments.Leases;
 
 import com.iwxyi.easymeeting.Utils.StringUtil;
 

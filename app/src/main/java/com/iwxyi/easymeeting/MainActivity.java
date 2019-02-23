@@ -1,6 +1,7 @@
 package com.iwxyi.easymeeting;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,8 +20,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iwxyi.easymeeting.Fragments.LeasesFragment;
-import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent;
+import com.iwxyi.easymeeting.Fragments.JoinMeetingFragment;
+import com.iwxyi.easymeeting.Fragments.Leases.LeasesFragment;
+import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent;
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.Users.LoginActivity;
@@ -28,15 +30,17 @@ import com.iwxyi.easymeeting.Users.PersonActivity;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LeasesFragment.OnLeaseListInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LeasesFragment.OnLeaseListInteractionListener,
+            JoinMeetingFragment.OnJoinInteractionListener{
 
     private final int REQUEST_CODE_LOGIN = 1;
     private final int RESULT_CODE_LOGIN = 1;
     private final int REQUEST_CODE_PERSON = 3;
 
     private FrameLayout mContentFl;
-    private LeasesFragment leasesFragment;
     private FragmentManager fm;
+    private LeasesFragment leasesFragment;
+    private JoinMeetingFragment joinFragment;
 
     private TextView mNicknameTv;
     private TextView mSignatureTv;
@@ -100,8 +104,8 @@ public class MainActivity extends AppCompatActivity
         });
 
         fm = getSupportFragmentManager();
-        leasesFragment = new LeasesFragment();
         FragmentTransaction ft = fm.beginTransaction();
+        leasesFragment = new LeasesFragment();
         ft.add(R.id.fl_content, leasesFragment, "leases").commit();
     }
 
@@ -140,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.action_refresh) {
             if (leasesFragment != null) {
                 leasesFragment.refreshLeases();
+                leasesFragment.showProgressDialog();
             }
         }
 
@@ -159,24 +164,31 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = fm.beginTransaction();
         hideFragment(ft);
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.my_leases) {
             if (leasesFragment == null) {
                 leasesFragment = new LeasesFragment();
                 ft.add(R.id.fl_content, leasesFragment, "leases");
             } else {
                 ft.show(leasesFragment);
             }
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.my_meeting) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.join_meeting) {
+            if (joinFragment == null) {
+                joinFragment = new JoinMeetingFragment();
+                ft.add(R.id.fl_content, joinFragment, "join");
+            } else {
+                ft.show(joinFragment);
+            }
+        } else if (id == R.id.user_certif) {
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
         }
+
+        ft.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -186,6 +198,9 @@ public class MainActivity extends AppCompatActivity
     private void hideFragment(FragmentTransaction ft) {
         if (leasesFragment != null) {
             ft.hide(leasesFragment);
+        }
+        if (joinFragment != null) {
+            ft.hide(joinFragment);
         }
     }
 
@@ -221,6 +236,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLeaseListInteraction(LeaseContent.LeaseItem item) {
+
+    }
+
+    @Override
+    public void onJoinInteraction(Uri uri) {
 
     }
 }

@@ -1,6 +1,7 @@
-package com.iwxyi.easymeeting.Fragments;
+package com.iwxyi.easymeeting.Fragments.Leases;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +18,7 @@ import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
-import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent;
-import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent.LeaseItem;
+import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent.LeaseItem;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
 
 /**
@@ -36,12 +36,18 @@ public class LeasesFragment extends Fragment {
     private OnLeaseListInteractionListener mListener;
     private MyLeasesRecyclerViewAdapter adapter;
 
+    private ProgressDialog progressDialog;
+
     public LeasesFragment() {
     }
 
     public void refreshLeases() {
         int user_id = User.user_id;
         ConnectUtil.Go(handler, WHAT_REFRESH, Paths.getNetpath("leases"), "user_id=" + user_id);
+    }
+
+    public void showProgressDialog() {
+        progressDialog = ProgressDialog.show(getActivity(), "刷新列表", "正在获取您的租约", true, false);
     }
 
     @SuppressLint("HandlerLeak")
@@ -54,6 +60,10 @@ public class LeasesFragment extends Fragment {
                     adapter.setValues(LeaseContent.ITEMS);
                     adapter.notifyDataSetChanged();
                     App.setVal("count", LeaseContent.ITEMS.size());
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
+                    break;
             }
         }
     };

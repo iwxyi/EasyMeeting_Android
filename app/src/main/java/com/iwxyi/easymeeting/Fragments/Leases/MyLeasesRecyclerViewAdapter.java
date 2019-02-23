@@ -1,4 +1,4 @@
-package com.iwxyi.easymeeting.Fragments;
+package com.iwxyi.easymeeting.Fragments.Leases;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.iwxyi.easymeeting.Fragments.LeasesFragment.OnLeaseListInteractionListener;
-import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent.LeaseItem;
+import com.iwxyi.easymeeting.Fragments.Leases.LeasesFragment.OnLeaseListInteractionListener;
+import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent.LeaseItem;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 

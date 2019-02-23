@@ -8,4 +8,7 @@
     <string name="action_settings">设置</string>
     <string name="action_refresh">刷新</string>
     <string name="title_activity_person">个人信息</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

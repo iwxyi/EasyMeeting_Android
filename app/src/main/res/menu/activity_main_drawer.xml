@@ -5,19 +5,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/my_leases"
             android:icon="@drawable/ic_menu_camera"
             android:title="我的租约" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/my_meeting"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="最近会议" />
+            android:title="我的会议" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/join_meeting"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="加入会议" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/user_certif"
             android:icon="@drawable/ic_menu_manage"
             android:title="身份认证" />
     </group>
