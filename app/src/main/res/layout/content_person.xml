@@ -20,18 +20,22 @@
             android:orientation="horizontal">
             <TextView
                 android:text="昵　称："
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
                 android:labelFor="@id/tv_nickname"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_nickname"
                 android:text="昵　称"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:textAlignment="textStart"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
         </LinearLayout>
@@ -39,6 +43,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
 
         <LinearLayout
@@ -47,18 +52,22 @@
             android:orientation="horizontal">
             <TextView
                 android:text="账　号："
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
                 android:labelFor="@id/tv_username"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_username"
                 android:text="账　号"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:textAlignment="textStart"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -66,6 +75,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
 
         <LinearLayout
@@ -74,26 +84,31 @@
             android:orientation="horizontal">
             <TextView
                 android:text="密　码："
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
                 android:labelFor="@id/tv_password"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_password"
                 android:text="密　码"
-                android:inputType="textPassword"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:textAlignment="textStart"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
+                android:inputType="textPassword"
                 android:textSize="18sp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
 
         <LinearLayout
@@ -102,18 +117,22 @@
             android:orientation="horizontal">
             <TextView
                 android:text="手　机："
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
                 android:labelFor="@id/tv_mobile"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_mobile"
                 android:text="手　机"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:textAlignment="textStart"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -121,6 +140,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
 
         <LinearLayout
@@ -129,18 +149,22 @@
             android:orientation="horizontal">
             <TextView
                 android:text="邮　箱："
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
                 android:labelFor="@id/tv_email"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_email"
                 android:text="邮　箱"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:textAlignment="textStart"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -148,6 +172,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
 
         <LinearLayout
@@ -156,18 +181,22 @@
             android:orientation="horizontal">
             <TextView
                 android:text="公　司："
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
                 android:labelFor="@id/tv_company"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_company"
                 android:text="公　司"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:textAlignment="textStart"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -175,6 +204,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
 
         <LinearLayout
@@ -183,18 +213,22 @@
             android:orientation="horizontal">
             <TextView
                 android:text="职　位："
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
                 android:labelFor="@id/tv_post"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_post"
                 android:text="职　位"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:textAlignment="textStart"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -202,6 +236,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -210,17 +245,20 @@
             <TextView
                 android:text="信用度："
                 android:labelFor="@id/tv_credit"
-                android:layout_width="wrap_content"
+                android:layout_weight="3"
+                android:textAlignment="textEnd"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_credit"
                 android:text="信用度"
-                android:layout_width="match_parent"
+                android:layout_weight="5"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="5dp"
                 android:layout_marginLeft="25dp"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -228,6 +266,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/colorLightGray" />
 
         <TextView

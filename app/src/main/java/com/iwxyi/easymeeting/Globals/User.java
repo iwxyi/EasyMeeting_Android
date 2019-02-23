@@ -2,7 +2,7 @@ package com.iwxyi.easymeeting.Globals;
 
 import com.iwxyi.easymeeting.Utils.SettingsUtil;
 
-public class UserInfo {
+public class User {
     public static int    state;      // 0 未登录；1 用户；2管理员
     public static int    user_id;    // 用户ID
     public static String username;   // 账号
@@ -25,6 +25,10 @@ public class UserInfo {
 
     public static boolean isAdmin() {
         return state == 2;
+    }
+
+    public static String id() {
+        return ""+user_id;
     }
 
 }

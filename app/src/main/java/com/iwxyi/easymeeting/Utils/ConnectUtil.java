@@ -56,6 +56,11 @@ public class ConnectUtil implements Runnable {
         thread.start();
     }
 
+    static public void Go(Handler handler, String path) {
+        Thread thread = new Thread(new ConnectUtil(handler, 0, path, ""));
+        thread.start();
+    }
+
     public ConnectUtil(Handler handler, int what, String path, String param) {
         this.handler = handler;
         this.what = what;

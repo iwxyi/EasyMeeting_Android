@@ -9,6 +9,7 @@ import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 import com.iwxyi.easymeeting.Utils.SettingsUtil;
 
 public class App extends Application {
+
     private static Context context;
 
     public void onCreate(){
@@ -26,7 +27,11 @@ public class App extends Application {
         return DateTimeUtil.getTimestamp();
     }
 
-    /*------------------DateTimeUtil---------------------------*/
+    /*------------------Network---------------------------*/
+    // 还是算了吧，就不放在这里了
+
+
+    /*------------------Debug---------------------------*/
     public static void toast(String str) {
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }

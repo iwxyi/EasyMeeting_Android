@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.Paths;
-import com.iwxyi.easymeeting.Globals.UserInfo;
+import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
 import com.iwxyi.easymeeting.Utils.StringUtil;
@@ -45,10 +45,10 @@ public class LoginActivity extends AppCompatActivity {
         mUsernameTv = (EditText) findViewById(R.id.tv_username);
         mPasswordTv = (EditText) findViewById(R.id.tv_password);
 
-        UserInfo.username = App.getVal("username");
-        UserInfo.password = App.getVal("password");
-        mUsernameTv.setText(UserInfo.username);
-        mPasswordTv.setText(UserInfo.password);
+        User.username = App.getVal("username");
+        User.password = App.getVal("password");
+        mUsernameTv.setText(User.username);
+        mPasswordTv.setText(User.password);
     }
 
     public void toLogin(View view) {
@@ -64,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         progressDialog = ProgressDialog.show(this, "请稍等", "正在登录", true, false);
-        UserInfo.username = username;
-        UserInfo.password = password;
+        User.username = username;
+        User.password = password;
 
         String[] param = {"username", username, "password", password};
         ConnectUtil.Go(handler, Paths.getNetpath("login"), param);
@@ -77,19 +77,19 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             progressDialog.dismiss();
             String result = msg.obj.toString();
-            UserInfo.user_id = StringUtil.getXmlInt(result, "user_id");
-            if (UserInfo.user_id != 0) {
-                UserInfo.state    = 1;
-                UserInfo.nickname = StringUtil.getXml   (result, "nickname");
-                UserInfo.credit   = StringUtil.getXmlInt(result, "credit"  );
-                UserInfo.mobile   = StringUtil.getXml   (result, "mobile"  );
-                UserInfo.email    = StringUtil.getXml   (result, "email"   );
-                UserInfo.company  = StringUtil.getXml   (result, "company" );
-                UserInfo.post     = StringUtil.getXml   (result, "post"    );
+            User.user_id = StringUtil.getXmlInt(result, "user_id");
+            if (User.user_id != 0) {
+                User.state    = 1;
+                User.nickname = StringUtil.getXml   (result, "nickname");
+                User.credit   = StringUtil.getXmlInt(result, "credit"  );
+                User.mobile   = StringUtil.getXml   (result, "mobile"  );
+                User.email    = StringUtil.getXml   (result, "email"   );
+                User.company  = StringUtil.getXml   (result, "company" );
+                User.post     = StringUtil.getXml   (result, "post"    );
 
-                App.setVal("user_id",  UserInfo.user_id );
-                App.setVal("username", UserInfo.username);
-                App.setVal("password", UserInfo.password);
+                App.setVal("user_id",  User.user_id );
+                App.setVal("username", User.username);
+                App.setVal("password", User.password);
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_CODE_LOGIN);
                 finish();

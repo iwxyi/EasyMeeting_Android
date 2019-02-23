@@ -3,7 +3,7 @@ package com.iwxyi.easymeeting.Globals;
 public class Paths {
     public static final String NETPATH = "http://iwxyi.com/easymeeting/public/index.php/android/Client/"; // 网络路径
     public static final String DATAPATH = "/EasyMeeting/";
-    public static final String PC_IP = "192.168.103.2";
+    public static final String PC_IP = "192.168.43.135"; // 本机电脑IP，调试用 // 192.168.103.2 不知道为啥这个IP也可以诶？
     public static final String NETPATHD = "http://"+PC_IP+"/easymeeting/public/index.php/android/Client/"; // 调试
 
     public static String getNetpath(String action) {
@@ -32,7 +32,7 @@ public class Paths {
             url += "?";
         else
             url += "&";
-        url += "user=" + UserInfo.user_id;
+        url += "user=" + User.user_id;
         return url;
     }
 }

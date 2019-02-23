@@ -9,21 +9,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.Paths;
-import com.iwxyi.easymeeting.Globals.UserInfo;
+import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent;
 import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent.LeaseItem;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
-
-import java.util.Objects;
 
 /**
  * A fragment representing a list of Items.
@@ -44,7 +40,7 @@ public class LeasesFragment extends Fragment {
     }
 
     public void refreshLeases() {
-        int user_id = UserInfo.user_id;
+        int user_id = User.user_id;
         ConnectUtil.Go(handler, WHAT_REFRESH, Paths.getNetpath("leases"), "user_id=" + user_id);
     }
 

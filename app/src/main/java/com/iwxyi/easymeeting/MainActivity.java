@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.iwxyi.easymeeting.Fragments.LeasesFragment;
 import com.iwxyi.easymeeting.Fragments.dummy.LeaseContent;
 import com.iwxyi.easymeeting.Globals.App;
-import com.iwxyi.easymeeting.Globals.UserInfo;
+import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.Users.LoginActivity;
 import com.iwxyi.easymeeting.Users.PersonActivity;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
 
         initView();
 
-        if (!UserInfo.isLogin()) {
+        if (!User.isLogin()) {
             startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), REQUEST_CODE_LOGIN);
         }
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         mHeadIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (UserInfo.isLogin()) { // 用户已经登录，切换到用户信息界面
+                if (User.isLogin()) { // 用户已经登录，切换到用户信息界面
                     startActivityForResult(new Intent(getApplicationContext(), PersonActivity.class), REQUEST_CODE_PERSON);
                 } else {
                     startActivityForResult(new Intent(getApplicationContext(), LoginActivity.class), REQUEST_CODE_LOGIN);
@@ -195,25 +195,25 @@ public class MainActivity extends AppCompatActivity
             if (leasesFragment != null) {
                 leasesFragment.refreshLeases();
             }
-            mNicknameTv.setText(UserInfo.nickname);
+            mNicknameTv.setText(User.nickname);
             // 设置签名，默认 公司 职位
             String signature = "";
-            if (!UserInfo.company.isEmpty()) {
-                signature = UserInfo.company;
+            if (!User.company.isEmpty()) {
+                signature = User.company;
             }
-            if (!UserInfo.post.isEmpty()) {
+            if (!User.post.isEmpty()) {
                 if (!signature.isEmpty())
                     signature += " ";
-                signature += UserInfo.post;
+                signature += User.post;
             }
             // 设置邮箱、手机号等
             if (signature.isEmpty()) {
-                if (!UserInfo.email.isEmpty())
-                    signature = UserInfo.email;
-                else if (!UserInfo.mobile.isEmpty())
-                    signature = UserInfo.mobile;
+                if (!User.email.isEmpty())
+                    signature = User.email;
+                else if (!User.mobile.isEmpty())
+                    signature = User.mobile;
                 else
-                    signature = "信用度："+UserInfo.credit;
+                    signature = "信用度："+ User.credit;
             }
             mSignatureTv.setText(signature);
         }

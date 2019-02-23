@@ -1,18 +1,32 @@
 package com.iwxyi.easymeeting.Users;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iwxyi.easymeeting.Globals.App;
-import com.iwxyi.easymeeting.Globals.UserInfo;
+import com.iwxyi.easymeeting.Globals.Paths;
+import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
+import com.iwxyi.easymeeting.Utils.ConnectUtil;
+import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class PersonActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private final int WHAT_UPDATE_RESULT = 1;
 
     private TextView mNicknameTv;
     private TextView mUsernameTv;
@@ -66,14 +80,14 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initData() {
-        mNicknameTv.setText(UserInfo.nickname);
-        mUsernameTv.setText(UserInfo.username);
-        mPasswordTv.setText(UserInfo.password);
-        mMobileTv.setText(UserInfo.mobile);
-        mEmailTv.setText(UserInfo.email);
-        mCompanyTv.setText(UserInfo.company);
-        mPostTv.setText(UserInfo.post);
-        mCreditTv.setText(""+UserInfo.credit);
+        mNicknameTv.setText(User.nickname);
+        mUsernameTv.setText(User.username);
+        mPasswordTv.setText(User.password);
+        mMobileTv.setText(User.mobile);
+        mEmailTv.setText(User.email);
+        mCompanyTv.setText(User.company);
+        mPostTv.setText(User.post);
+        mCreditTv.setText(""+ User.credit);
 
         int firstOpen = App.getInt("firstOpen");
         int now = App.getTimestamp();
@@ -92,43 +106,161 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_nickname:
-                // TODO 19/02/23
+                inputDialog("nickname", "修改用户昵称", User.nickname);
                 break;
             case R.id.tv_username:
-                // TODO 19/02/23
+                App.toast("不能修改用户名");
                 break;
             case R.id.tv_password:
-                // TODO 19/02/23
+                inputDialog("password", "修改用户密码", User.password);
                 break;
             case R.id.tv_mobile:
-                // TODO 19/02/23
+                inputDialog("mobile", "修改手机号", User.mobile);
                 break;
             case R.id.tv_email:
-                // TODO 19/02/23
+                inputDialog("email", "修改邮箱", User.email);
                 break;
             case R.id.tv_company:
-                // TODO 19/02/23
+                inputDialog("company", "修改所属公司", User.company);
                 break;
             case R.id.tv_post:
-                // TODO 19/02/23
+                inputDialog("post", "修改工作职位", User.post);
                 break;
             case R.id.tv_credit:
-                // TODO 19/02/23
-                break;
-            case R.id.tv_usedDay:
-                // TODO 19/02/23
-                break;
-            case R.id.tv_leaseCount:
-                // TODO 19/02/23
+                App.toast("用户信用程度，数值越大则优先权越高，并享有一定的价格折扣");
                 break;
             case R.id.btn_signout:
-                // TODO 19/02/23
+                Toast.makeText(this, "当前为演示模式，无法退出", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fab:
-                // TODO 19/02/23
+                Snackbar.make(findViewById(R.id.fab), "用户反馈邮箱：482582886@qq.com", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 弹出输入框
+     * @param aim 目标
+     * @param title 标题
+     * @param def 默认值
+     * @return 输入的字符串
+     */
+    private String inputDialog(final String aim, String title, String def) {
+        final String[] result = new String[1];
+        LayoutInflater factory = LayoutInflater.from(PersonActivity.this);//提示框
+        final View view = factory.inflate(R.layout.edit_box, null);//这里必须是final的
+        final EditText edit = (EditText) view.findViewById(R.id.editText);//获得输入框对象
+        edit.setText(def);
+        new AlertDialog.Builder(PersonActivity.this)
+                .setTitle(title)//提示框标题
+                .setView(view)
+                .setPositiveButton("确定",//提示框的两个按钮
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                result[0] = edit.getText().toString();
+                                onInputDialog(aim, edit.getText().toString());
+                            }
+                        })
+                .setNegativeButton("取消", null)
+                .create().show();
+        return result[0];
+    }
+
+    /**
+     * 输入框结束事件
+     * @param aim 目标
+     * @param s   字符串
+     */
+    private void onInputDialog(String aim, String s) {
+
+        switch (aim) {
+            case "nickname":
+                if (!canMatch(s, "\\S+")) {
+                    App.toast("用户名不能有空格");
+                    return;
+                }
+                mNicknameTv.setText(User.nickname = s);
+                break;
+            case "username":
+                if (!canMatch(s, "\\S+")) {
+                    App.toast("用户名不能有空格");
+                    return;
+                }
+                mUsernameTv.setText(User.username = s);
+                break;
+            case "password":
+                if (!canMatch(s, "\\S+")) {
+                    App.toast("密码不能有空格");
+                    return;
+                }
+                mPasswordTv.setText(User.password = s);
+                break;
+            case "mobile":
+                if (!canMatch(s, "\\+?\\d{5,15}")) {
+                    App.toast("手机号格式不正确");
+                    return;
+                }
+                mMobileTv.setText(User.mobile = s);
+                break;
+            case "email":
+                if (!canMatch(s, "[\\w\\.]+@[\\.\\w]+")) {
+                    App.toast("邮箱格式不正确");
+                    return;
+                }
+                mEmailTv.setText(User.email = s);
+                break;
+            case "company":
+                if (!canMatch(s, "\\S+")) {
+                    App.toast("公司不能有空格");
+                    return;
+                }
+                mCompanyTv.setText(User.company = s);
+                break;
+            case "post":
+                if (!canMatch(s, "\\S+")) {
+                    App.toast("职位不能有空格");
+                    return;
+                }
+                mPostTv.setText(User.post = s);
+                break;
+        }
+
+        updateContent(aim, s);
+    }
+
+    /**
+     * 上传用户信息
+     * @param key 文件名
+     * @param val   数值
+     */
+    private void updateContent(final String key, final String val) {
+        String path = Paths.getNetpath("updateUserInfo");
+        String[] params = new String[]{"user_id", User.id(), key, val};
+        ConnectUtil.Go(handler, path, params);
+    }
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            String s = (String) msg.obj;
+            String result = StringUtil.getXml(s, "result");
+            if (result.equals("OK")) {
+                Snackbar.make(findViewById(R.id.fab), "修改成功", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else if (!result.isEmpty()) {
+                Snackbar.make(findViewById(R.id.fab), "修改失败:"+StringUtil.getXml(s, "result"), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+
+        }
+    };
+
+    boolean canMatch(String str, String pat) {
+        return StringUtil.canMatch(str, pat);
     }
 }

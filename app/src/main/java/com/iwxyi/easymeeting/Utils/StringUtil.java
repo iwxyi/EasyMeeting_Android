@@ -1,8 +1,21 @@
 package com.iwxyi.easymeeting.Utils;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class StringUtil {
+
+    /**
+     * 能否匹配正则表达式，用来判断输入的结构是否正确
+     * @param string  字符串
+     * @param pattern 正则表达式格式
+     * @return 能否匹配
+     */
+    public static boolean canMatch(String string, String pattern) {
+        if ("".equals(string)) return false;
+        return Pattern.matches(pattern, string);
+    }
+
     /**
      * 从XML中读取文本内容列表
      * @param str 字符串
