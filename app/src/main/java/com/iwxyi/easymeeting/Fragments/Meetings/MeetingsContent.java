@@ -1,5 +1,6 @@
-package com.iwxyi.easymeeting.Fragments.Leases;
+package com.iwxyi.easymeeting.Fragments.Meetings;
 
+import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 import java.util.ArrayList;
@@ -12,28 +13,38 @@ import java.util.Map;
  * Android template wizards.
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
+ * 本来是想继承 LeasesContent，但是发现不行诶……除非把 LeaseContent 的 static 去掉
  */
-public class LeaseContent {
+public class MeetingsContent /*extends LeaseContent */{
 
-    public static final List<LeaseItem> ITEMS = new ArrayList<LeaseItem>();
-    public static final Map<Integer, LeaseItem> ITEM_MAP = new HashMap<Integer, LeaseItem>();
+    public static final List<MeetingItem> ITEMS = new ArrayList<MeetingItem>();
+    public static final Map<Integer, MeetingItem> ITEM_MAP = new HashMap<Integer, MeetingItem>();
 
     public static void addItemsFromString(String str) {
         ITEMS.clear();
         ITEM_MAP.clear();
         ArrayList<String> list = StringUtil.getXmls(str, "lease");
         for (String s : list) {
-            LeaseItem item = new LeaseItem(s);
+            MeetingItem item = new MeetingItem(s);
             addItem(item);
         }
     }
 
-    private static void addItem(LeaseItem item) {
+    private static void addItem(MeetingItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.lease_id, item);
     }
 
-    public static class LeaseItem {
+    private static String makeDetails(int position) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Details about Item: ").append(position);
+        for (int i = 0; i < position; i++) {
+            builder.append("\nMore details information here.");
+        }
+        return builder.toString();
+    }
+
+    public static class MeetingItem {
         public int lease_id;
         public int room_id;
         public int admin_id;
@@ -55,7 +66,7 @@ public class LeaseContent {
         public int create_time;
         public int update_time;
 
-        public LeaseItem(int lease_id, int room_id, int admin_id, int user_id, String room_name, String admin_name, int start_time, int finish_time, String theme, String usage, String message, boolean sweep, boolean entertain, boolean remote, String circumstance, int admin_score, int user_score, int credit_change, int create_time, int update_time) {
+        public MeetingItem(int lease_id, int room_id, int admin_id, int user_id, String room_name, String admin_name, int start_time, int finish_time, String theme, String usage, String message, boolean sweep, boolean entertain, boolean remote, String circumstance, int admin_score, int user_score, int credit_change, int create_time, int update_time) {
             this.lease_id = lease_id;
             this.room_id = room_id;
             this.admin_id = admin_id;
@@ -78,20 +89,15 @@ public class LeaseContent {
             this.update_time = update_time;
         }
 
-        public LeaseItem(String str) {
+        public MeetingItem(String str) {
             fromString(str);
         }
 
-        public LeaseItem(String id, String content, String details) {
+        public MeetingItem(String id, String content, String details) {
             this.lease_id = Integer.parseInt(id);
             this.theme = content;
             this.usage = details;
         }
-
-        /*@Override
-        public String toString() {
-            return content;
-        }*/
 
         public void fromString(String str) {
             this.lease_id = StringUtil.getXmlInt(str, "lease_id");

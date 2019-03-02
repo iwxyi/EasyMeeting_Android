@@ -36,32 +36,32 @@ public class ConnectUtil implements Runnable {
      * @param path    网址
      * @param param   参数
      */
-    static public void Go(Handler handler, int what, String path, String param) {
-        Thread thread = new Thread(new ConnectUtil(handler, what, path, param));
+    static public void Go(int what, String path, String param, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(what, path, param, handler));
         thread.start();
     }
 
-    static public void Go(Handler handler, int what, String path, String[] param) {
-        Thread thread = new Thread(new ConnectUtil(handler, what, path, param));
+    static public void Go(int what, String path, String[] param, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(what, path, param, handler));
         thread.start();
     }
 
-    static public void Go(Handler handler, String path, String param) {
-        Thread thread = new Thread(new ConnectUtil(handler, 0, path, param));
+    static public void Go(String path, String param, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(0, path, param, handler));
         thread.start();
     }
 
-    static public void Go(Handler handler, String path, String param[]) {
-        Thread thread = new Thread(new ConnectUtil(handler, 0, path, param));
+    static public void Go(String path, String param[], Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(0, path, param, handler));
         thread.start();
     }
 
-    static public void Go(Handler handler, String path) {
-        Thread thread = new Thread(new ConnectUtil(handler, 0, path, ""));
+    static public void Go(String path, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(0, path, "", handler));
         thread.start();
     }
 
-    public ConnectUtil(Handler handler, int what, String path, String param) {
+    public ConnectUtil(int what, String path, String param, Handler handler) {
         this.handler = handler;
         this.what = what;
         this.path = path;
@@ -69,17 +69,17 @@ public class ConnectUtil implements Runnable {
 
     }
 
-    public ConnectUtil(Handler handler, String path, String param) {
-        this(handler, 0, path, param);
+    public ConnectUtil(String path, String param, Handler handler) {
+        this(0, path, param, handler);
     }
 
-    public ConnectUtil(Handler handler, String path) {
-        this(handler, 0, path, "");
+    public ConnectUtil(String path, Handler handler) {
+        this(0, path, "", handler);
     }
 
-    public ConnectUtil(Handler handler, int what, String path, String[] params) {
+    public ConnectUtil(int what, String path, String[] params, Handler handler) {
 
-        this(handler, what, path, "");
+        this(what, path, "", handler);
 
         StringBuilder url = new StringBuilder();
         int count = params.length;
@@ -104,7 +104,7 @@ public class ConnectUtil implements Runnable {
     }
 
     public ConnectUtil(Handler handler, String path, String[] params) {
-        this(handler, 0, path, params);
+        this(0, path, params, handler);
     }
 
     public ConnectUtil post() {

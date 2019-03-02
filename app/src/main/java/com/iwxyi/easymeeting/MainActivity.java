@@ -1,11 +1,11 @@
 package com.iwxyi.easymeeting;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +22,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iwxyi.easymeeting.Fragments.JoinMeetingFragment;
-import com.iwxyi.easymeeting.Fragments.Leases.LeasesFragment;
 import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent;
+import com.iwxyi.easymeeting.Fragments.Leases.LeasesFragment;
+import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsContent;
+import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsFragment;
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.Users.LoginActivity;
@@ -31,16 +34,32 @@ import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LeasesFragment.OnLeaseListInteractionListener,
-            JoinMeetingFragment.OnJoinInteractionListener{
+            MeetingsFragment.OnMeetingListInteractionListener, JoinMeetingFragment.OnJoinInteractionListener{
 
-    private final int REQUEST_CODE_LOGIN = 1;
-    private final int RESULT_CODE_LOGIN = 1;
-    private final int REQUEST_CODE_PERSON = 3;
+    private final int REQUEST_CODE_LOGIN    = 1;
+    private final int REQUEST_CODE_REGISTER = 2;
+    private final int REQUEST_CODE_PERSON   = 3;
+    private final int REQUEST_CODE_ADD      = 4;
+    private final int REQUEST_CODE_EDIT     = 5;
+    private final int REQUEST_CODE_DELETE   = 6;
+    private final int REQUEST_CODE_JOIN     = 7;
+    private final int REQUEST_CODE_EXIT     = 8;
+
+    private final int RESULT_CODE_LOGIN     = 1;
+    private final int RESULT_CODE_REGISTER  = 2;
+    private final int RESULT_CODE_PERSON    = 3;
+    private final int RESULT_CODE_ADD       = 4;
+    private final int RESULT_CODE_EDIT      = 5;
+    private final int RESULT_CODE_DELETE    = 6;
+    private final int RESULT_CODE_JOIN      = 7;
+    private final int RESULT_CODE_EXIT      = 8;
 
     private FrameLayout mContentFl;
     private FragmentManager fm;
     private LeasesFragment leasesFragment;
+    private MeetingsFragment meetingsFragment;
     private JoinMeetingFragment joinFragment;
+    private int drawerMenuIndex = 1;
 
     private TextView mNicknameTv;
     private TextView mSignatureTv;
@@ -71,8 +90,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                startActivityForResult(new Intent(MainActivity.this, AddLeaseActivity.class), REQUEST_CODE_ADD);
             }
         });
 
@@ -142,10 +162,19 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_refresh) {
-            if (leasesFragment != null) {
-                leasesFragment.refreshLeases();
-                leasesFragment.showProgressDialog();
+            if (drawerMenuIndex == 1) {
+                if (leasesFragment != null) {
+                    leasesFragment.refreshLeases();
+                    leasesFragment.showProgressDialog();
+                }
+            } else if (drawerMenuIndex == 2) {
+                if (meetingsFragment != null) {
+                    meetingsFragment.refreshMeetings();
+                    meetingsFragment.showProgressDialog();
+                }
             }
+
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -168,11 +197,21 @@ public class MainActivity extends AppCompatActivity
             if (leasesFragment == null) {
                 leasesFragment = new LeasesFragment();
                 ft.add(R.id.fl_content, leasesFragment, "leases");
+                leasesFragment.refreshLeases();
             } else {
                 ft.show(leasesFragment);
             }
+            drawerMenuIndex = 1;
         } else if (id == R.id.my_meeting) {
-
+            if (meetingsFragment == null) {
+                meetingsFragment = new MeetingsFragment();
+                ft.add(R.id.fl_content, meetingsFragment, "meetings");
+                meetingsFragment.refreshMeetings();
+                //meetingsFragment.showProgressDialog();
+            } else {
+                ft.show(meetingsFragment);
+            }
+            drawerMenuIndex = 2;
         } else if (id == R.id.join_meeting) {
             if (joinFragment == null) {
                 joinFragment = new JoinMeetingFragment();
@@ -180,8 +219,9 @@ public class MainActivity extends AppCompatActivity
             } else {
                 ft.show(joinFragment);
             }
+            drawerMenuIndex = 3;
         } else if (id == R.id.user_certif) {
-
+            drawerMenuIndex = 4;
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -192,6 +232,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -199,9 +240,13 @@ public class MainActivity extends AppCompatActivity
         if (leasesFragment != null) {
             ft.hide(leasesFragment);
         }
+        if (meetingsFragment != null) {
+            ft.hide(meetingsFragment);
+        }
         if (joinFragment != null) {
             ft.hide(joinFragment);
         }
+
     }
 
     @Override
@@ -231,11 +276,24 @@ public class MainActivity extends AppCompatActivity
                     signature = "信用度："+ User.credit;
             }
             mSignatureTv.setText(signature);
+        } else if (resultCode == RESULT_CODE_ADD) {
+            if (drawerMenuIndex == 1 && leasesFragment != null) {
+                leasesFragment.refreshLeases();
+                leasesFragment.showProgressDialog();
+            } else if (drawerMenuIndex == 2 && meetingsFragment != null) {
+                meetingsFragment.refreshMeetings();
+                meetingsFragment.showProgressDialog();
+            }
         }
     }
 
     @Override
     public void onLeaseListInteraction(LeaseContent.LeaseItem item) {
+
+    }
+
+    @Override
+    public void onMeetingListInteraction(MeetingsContent.MeetingItem item) {
 
     }
 

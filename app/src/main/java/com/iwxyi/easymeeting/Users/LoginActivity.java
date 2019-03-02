@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         User.password = password;
 
         String[] param = {"username", username, "password", password};
-        ConnectUtil.Go(handler, Paths.getNetpath("login"), param);
+        ConnectUtil.Go(Paths.getNetpath("login"), param, handler);
     }
 
     @SuppressLint("HandlerLeak")

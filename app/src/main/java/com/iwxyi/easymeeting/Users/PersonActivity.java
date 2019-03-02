@@ -241,7 +241,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     private void updateContent(final String key, final String val) {
         String path = Paths.getNetpath("updateUserInfo");
         String[] params = new String[]{"user_id", User.id(), key, val};
-        ConnectUtil.Go(handler, path, params);
+        ConnectUtil.Go(path, params, handler);
     }
 
     @SuppressLint("HandlerLeak")
