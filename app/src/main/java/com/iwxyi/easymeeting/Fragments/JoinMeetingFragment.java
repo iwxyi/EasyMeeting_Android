@@ -20,6 +20,7 @@ import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
+import com.iwxyi.easymeeting.Utils.NetworkCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 /**
@@ -126,28 +127,23 @@ public class JoinMeetingFragment extends Fragment implements View.OnClickListene
                     return ;
                 }
                 String[] params = new String[]{"user_id", User.id(), "lease_id", id};
-                ConnectUtil.Go(Paths.getNetpath("joinLease"), params, handler);
                 progressDialog = ProgressDialog.show(getActivity(), "请稍等", "正在加入", true, false);
+                ConnectUtil.Go(Paths.getNetpath("joinLease"), params, new NetworkCallback(){
+                    @Override
+                    public void onFinish(String result) {
+                        if (result.equals("OK")) {
+                            App.toast("加入会议成功");
+                        } else {
+                            App.toast("加入会议失败" + result);
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
                 break;
             default:
                 break;
         }
     }
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String s = msg.obj.toString();
-            String result = StringUtil.getXml(s, "result");
-            if (result.equals("OK")) {
-                App.toast("加入会议成功");
-            } else {
-                App.toast("加入会议失败" + result);
-            }
-            progressDialog.dismiss();
-        }
-    };
 
     /**
      * This interface must be implemented by activities that contain this

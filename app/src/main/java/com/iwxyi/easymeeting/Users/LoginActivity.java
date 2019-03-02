@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,6 +16,7 @@ import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
+import com.iwxyi.easymeeting.Utils.NetworkCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class LoginActivity extends AppCompatActivity {
@@ -68,36 +67,33 @@ public class LoginActivity extends AppCompatActivity {
         User.password = password;
 
         String[] param = {"username", username, "password", password};
-        ConnectUtil.Go(Paths.getNetpath("login"), param, handler);
+        ConnectUtil.Go(Paths.getNetpath("login"), param, new NetworkCallback(){
+            @Override
+            public void onFinish(String result) {
+                progressDialog.dismiss();
+                User.user_id = StringUtil.getXmlInt(result, "user_id");
+                if (User.user_id != 0) {
+                    User.state    = 1;
+                    User.nickname = StringUtil.getXml   (result, "nickname");
+                    User.credit   = StringUtil.getXmlInt(result, "credit"  );
+                    User.mobile   = StringUtil.getXml   (result, "mobile"  );
+                    User.email    = StringUtil.getXml   (result, "email"   );
+                    User.company  = StringUtil.getXml   (result, "company" );
+                    User.post     = StringUtil.getXml   (result, "post"    );
+
+                    App.setVal("user_id",  User.user_id );
+                    App.setVal("username", User.username);
+                    App.setVal("password", User.password);
+                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_CODE_LOGIN);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "登录失败，用户名或者密码错误", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            progressDialog.dismiss();
-            String result = msg.obj.toString();
-            User.user_id = StringUtil.getXmlInt(result, "user_id");
-            if (User.user_id != 0) {
-                User.state    = 1;
-                User.nickname = StringUtil.getXml   (result, "nickname");
-                User.credit   = StringUtil.getXmlInt(result, "credit"  );
-                User.mobile   = StringUtil.getXml   (result, "mobile"  );
-                User.email    = StringUtil.getXml   (result, "email"   );
-                User.company  = StringUtil.getXml   (result, "company" );
-                User.post     = StringUtil.getXml   (result, "post"    );
-
-                App.setVal("user_id",  User.user_id );
-                App.setVal("username", User.username);
-                App.setVal("password", User.password);
-                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_CODE_LOGIN);
-                finish();
-            } else {
-                Toast.makeText(LoginActivity.this, "登录失败，用户名或者密码错误", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
 
     public void toRegister(View view) {
         startActivityForResult(new Intent(LoginActivity.this, RegisterActivity.class), REQUEST_CODE_REGISTER);

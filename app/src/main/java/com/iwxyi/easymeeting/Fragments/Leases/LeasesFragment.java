@@ -20,6 +20,7 @@ import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent.LeaseItem;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
+import com.iwxyi.easymeeting.Utils.NetworkCallback;
 
 /**
  * A fragment representing a list of Items.
@@ -28,8 +29,6 @@ import com.iwxyi.easymeeting.Utils.ConnectUtil;
  * interface.
  */
 public class LeasesFragment extends Fragment {
-
-    private final int WHAT_REFRESH = 1;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -43,30 +42,23 @@ public class LeasesFragment extends Fragment {
 
     public void refreshLeases() {
         int user_id = User.user_id;
-        ConnectUtil.Go(Paths.getNetpath("leases"), "user_id=" + user_id, WHAT_REFRESH, handler);
+        ConnectUtil.Go(Paths.getNetpath("leases"), "user_id=" + user_id, new NetworkCallback(){
+            @Override
+            public void onFinish(String result) {
+                LeaseContent.addItemsFromString(result);
+                adapter.setValues(LeaseContent.ITEMS);
+                adapter.notifyDataSetChanged();
+                App.setVal("count", LeaseContent.ITEMS.size());
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+            }
+        });
     }
 
     public void showProgressDialog() {
         progressDialog = ProgressDialog.show(getActivity(), "刷新列表", "正在获取您的租约", true, false);
     }
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case WHAT_REFRESH :
-                    LeaseContent.addItemsFromString(msg.obj.toString());
-                    adapter.setValues(LeaseContent.ITEMS);
-                    adapter.notifyDataSetChanged();
-                    App.setVal("count", LeaseContent.ITEMS.size());
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    break;
-            }
-        }
-    };
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")

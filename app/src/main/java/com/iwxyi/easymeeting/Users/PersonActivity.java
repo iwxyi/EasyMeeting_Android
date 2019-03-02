@@ -22,6 +22,7 @@ import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
+import com.iwxyi.easymeeting.Utils.NetworkCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class PersonActivity extends AppCompatActivity implements View.OnClickListener {
@@ -241,24 +242,19 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     private void updateContent(final String key, final String val) {
         String path = Paths.getNetpath("updateUserInfo");
         String[] params = new String[]{"user_id", User.id(), key, val};
-        ConnectUtil.Go(path, params, handler);
-    }
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            String s = (String) msg.obj;
-            String result = StringUtil.getXml(s, "result");
-            if (result.equals("OK")) {
-                Snackbar.make(findViewById(R.id.fab), "修改成功", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            } else if (!result.isEmpty()) {
-                Snackbar.make(findViewById(R.id.fab), "修改失败:"+StringUtil.getXml(s, "result"), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        ConnectUtil.Go(path, params, new NetworkCallback(){
+            @Override
+            public void onFinish(String result) {
+                if (result.equals("OK")) {
+                    Snackbar.make(findViewById(R.id.fab), "修改成功", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else if (!result.isEmpty()) {
+                    Snackbar.make(findViewById(R.id.fab), "修改失败:"+StringUtil.getXml(result, "result"), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
-
-        }
-    };
+        });
+    }
 
     boolean canMatch(String str, String pat) {
         return StringUtil.canMatch(str, pat);

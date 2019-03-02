@@ -13,40 +13,37 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.iwxyi.easymeeting.Globals.Paths;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class ConnectUtil implements Runnable {
 
-    String path, param;
-    String method = "GET";
-    int what;
-    Handler handler;
+    /******************************** Runnable(JDK1.8) ************************************/
 
-    static public void Go(String path, String param, final Runnable runnable) {
+    static String temp_result = "";
+
+    static public void Go(String path, String param[], final Runnable runnable) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
+                temp_result = (String) msg.obj;
                 runnable.run();
             }
         };
         Go(path, param, 0, handler);
     }
 
-    static public void Go(String path, String[] param, final Runnable runnable) {
+    static public void Go(String path, String param, final Runnable runnable) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
+                temp_result = (String) msg.obj;
                 runnable.run();
             }
         };
@@ -58,18 +55,87 @@ public class ConnectUtil implements Runnable {
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
+                temp_result = (String) msg.obj;
                 runnable.run();
             }
         };
         Go(path, "", 0, handler);
     }
 
+
+    static public String getResult() {
+        return temp_result;
+    }
+
+
+    /******************************** Callback ************************************/
+
     /**
-     * 静态类工具，一行代码才可联网问题
-     * @param handler 要返回的 Handler，进行处理返回的代码
-     * @param what    返回的 what，由使用的对象来决定
+     * 一行工具联网并直接运行的工具类
+     * @param path              网络路径
+     * @param param             参数
+     * @param networkCallback   回调函数
+     */
+    static public void Go(String path, String param[], final NetworkCallback networkCallback) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                String str = (String) msg.obj;
+                networkCallback.onFinish(str);
+                if (str.isEmpty()) {
+                    networkCallback.onFail(str);
+                } else {
+                    networkCallback.onSuccess(str);
+                }
+            }
+        };
+        Go(path, param, 0, handler);
+    }
+
+    static public void Go(String path, String param, final NetworkCallback networkCallback) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                String str = (String) msg.obj;
+                networkCallback.onFinish(str);
+                if (str.isEmpty()) {
+                    networkCallback.onFail(str);
+                } else {
+                    networkCallback.onSuccess(str);
+                }
+            }
+        };
+        Go(path, param, 0, handler);
+    }
+
+    static public void Go(String path, final NetworkCallback networkCallback) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                String str = (String) msg.obj;
+                networkCallback.onFinish(str);
+                if (str.isEmpty()) {
+                    networkCallback.onFail(str);
+                } else {
+                    networkCallback.onSuccess(str);
+                }
+            }
+        };
+        Go(path, "", 0, handler);
+    }
+
+
+    /******************************** Handler ************************************/
+
+    /**
+     * 静态类工具，一行代码才可联网工具
      * @param path    网址
      * @param param   参数
+     * @param what    返回的 what，由使用的对象来决定
+     * @param handler 要返回的 Handler，进行处理返回的代码
      */
     static public void Go(String path, String param, int what, Handler handler) {
         Thread thread = new Thread(new ConnectUtil(path, param, what, handler));
@@ -95,6 +161,14 @@ public class ConnectUtil implements Runnable {
         Thread thread = new Thread(new ConnectUtil(path, "", 0, handler));
         thread.start();
     }
+
+
+    /******************************** inner Class ************************************/
+
+    String path, param;
+    String method = "GET";
+    int what;
+    Handler handler;
 
     /**
      * 连接的构造函数

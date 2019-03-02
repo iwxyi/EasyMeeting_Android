@@ -20,6 +20,7 @@ import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
+import com.iwxyi.easymeeting.Utils.NetworkCallback;
 
 /**
  * A fragment representing a list of Items.
@@ -47,31 +48,23 @@ public class MeetingsFragment extends Fragment {
 
     public void refreshMeetings() {
         int user_id = User.user_id;
-        ConnectUtil.Go(Paths.getNetpath("meetings"), "user_id=" + user_id, WHAT_REFRESH, handler);
+        ConnectUtil.Go(Paths.getNetpath("meetings"), "user_id=" + user_id, new NetworkCallback(){
+            @Override
+            public void onFinish(String result) {
+                MeetingsContent.addItemsFromString(result);
+                adapter.setValues(MeetingsContent.ITEMS);
+                adapter.notifyDataSetChanged();
+                App.setVal("count", MeetingsContent.ITEMS.size());
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+            }
+        });
     }
 
     public void showProgressDialog() {
         progressDialog = ProgressDialog.show(getActivity(), "刷新列表", "正在获取您参加的会议", true, false);
     }
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-            switch (msg.what) {
-                case WHAT_REFRESH:
-                    MeetingsContent.addItemsFromString(msg.obj.toString());
-                    adapter.setValues(MeetingsContent.ITEMS);
-                    adapter.notifyDataSetChanged();
-                    App.setVal("count", MeetingsContent.ITEMS.size());
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                    break;
-            }
-        }
-    };
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
