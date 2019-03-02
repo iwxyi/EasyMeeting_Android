@@ -3,10 +3,12 @@ package com.iwxyi.easymeeting.Utils;
 /**
  * @author: mrxy001
  * @time: 2019.2.20
+ * @Change: 2019.3.2
  * 宇宙超级无敌联网类
  * 一行搞定取网页源码问题
  */
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -29,6 +31,39 @@ public class ConnectUtil implements Runnable {
     int what;
     Handler handler;
 
+    static public void Go(String path, String param, final Runnable runnable) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                runnable.run();
+            }
+        };
+        Go(path, param, 0, handler);
+    }
+
+    static public void Go(String path, String[] param, final Runnable runnable) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                runnable.run();
+            }
+        };
+        Go(path, param, 0, handler);
+    }
+
+    static public void Go(String path, final Runnable runnable) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                runnable.run();
+            }
+        };
+        Go(path, "", 0, handler);
+    }
+
     /**
      * 静态类工具，一行代码才可联网问题
      * @param handler 要返回的 Handler，进行处理返回的代码
@@ -36,50 +71,56 @@ public class ConnectUtil implements Runnable {
      * @param path    网址
      * @param param   参数
      */
-    static public void Go(int what, String path, String param, Handler handler) {
-        Thread thread = new Thread(new ConnectUtil(what, path, param, handler));
+    static public void Go(String path, String param, int what, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(path, param, what, handler));
         thread.start();
     }
 
-    static public void Go(int what, String path, String[] param, Handler handler) {
-        Thread thread = new Thread(new ConnectUtil(what, path, param, handler));
+    static public void Go(String path, String[] param, int what, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(path, param, what, handler));
         thread.start();
     }
 
     static public void Go(String path, String param, Handler handler) {
-        Thread thread = new Thread(new ConnectUtil(0, path, param, handler));
+        Thread thread = new Thread(new ConnectUtil(path, param, 0, handler));
         thread.start();
     }
 
     static public void Go(String path, String param[], Handler handler) {
-        Thread thread = new Thread(new ConnectUtil(0, path, param, handler));
+        Thread thread = new Thread(new ConnectUtil(path, param, 0, handler));
         thread.start();
     }
 
     static public void Go(String path, Handler handler) {
-        Thread thread = new Thread(new ConnectUtil(0, path, "", handler));
+        Thread thread = new Thread(new ConnectUtil(path, "", 0, handler));
         thread.start();
     }
 
-    public ConnectUtil(int what, String path, String param, Handler handler) {
+    /**
+     * 连接的构造函数
+     * @param path      网址
+     * @param param     参数（文本）
+     * @param what      Message.what
+     * @param handler   Handler
+     */
+    public ConnectUtil(String path, String param, int what, Handler handler) {
         this.handler = handler;
         this.what = what;
         this.path = path;
         this.param = param;
-
     }
 
     public ConnectUtil(String path, String param, Handler handler) {
-        this(0, path, param, handler);
+        this(path, param, 0, handler);
     }
 
     public ConnectUtil(String path, Handler handler) {
-        this(0, path, "", handler);
+        this(path, "", 0, handler);
     }
 
-    public ConnectUtil(int what, String path, String[] params, Handler handler) {
+    public ConnectUtil(String path, String[] params, int what, Handler handler) {
 
-        this(what, path, "", handler);
+        this(path, "", what, handler);
 
         StringBuilder url = new StringBuilder();
         int count = params.length;
@@ -104,7 +145,7 @@ public class ConnectUtil implements Runnable {
     }
 
     public ConnectUtil(Handler handler, String path, String[] params) {
-        this(0, path, params, handler);
+        this(path, params, 0, handler);
     }
 
     public ConnectUtil post() {
