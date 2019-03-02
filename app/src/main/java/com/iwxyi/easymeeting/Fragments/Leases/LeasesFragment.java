@@ -43,7 +43,7 @@ public class LeasesFragment extends Fragment {
 
     public void refreshLeases() {
         int user_id = User.user_id;
-        ConnectUtil.Go(WHAT_REFRESH, Paths.getNetpath("leases"), "user_id=" + user_id, handler);
+        ConnectUtil.Go(Paths.getNetpath("leases"), "user_id=" + user_id, WHAT_REFRESH, handler);
     }
 
     public void showProgressDialog() {

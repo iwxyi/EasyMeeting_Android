@@ -126,7 +126,7 @@ public class JoinMeetingFragment extends Fragment implements View.OnClickListene
                     return ;
                 }
                 String[] params = new String[]{"user_id", User.id(), "lease_id", id};
-                ConnectUtil.Go(handler, Paths.getNetpath("joinLease"), params);
+                ConnectUtil.Go(Paths.getNetpath("joinLease"), params, handler);
                 progressDialog = ProgressDialog.show(getActivity(), "请稍等", "正在加入", true, false);
                 break;
             default:

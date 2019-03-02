@@ -10,17 +10,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsContent.MeetingItem;
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
-import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsContent.MeetingItem;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
 
 /**
@@ -49,7 +47,7 @@ public class MeetingsFragment extends Fragment {
 
     public void refreshMeetings() {
         int user_id = User.user_id;
-        ConnectUtil.Go(WHAT_REFRESH, Paths.getNetpath("meetings"), "user_id=" + user_id, handler);
+        ConnectUtil.Go(Paths.getNetpath("meetings"), "user_id=" + user_id, WHAT_REFRESH, handler);
     }
 
     public void showProgressDialog() {
