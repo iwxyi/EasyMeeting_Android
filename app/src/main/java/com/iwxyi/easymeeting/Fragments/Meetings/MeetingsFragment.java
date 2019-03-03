@@ -45,7 +45,7 @@ public class MeetingsFragment extends Fragment {
 
     public void refreshMeetings() {
         int user_id = User.user_id;
-        ConnectUtil.Go(Paths.getNetpath("meetings"), "user_id=" + user_id, new StringCallback(){
+        ConnectUtil.Get(Paths.getNetpath("meetings"), "user_id=" + user_id, new StringCallback(){
             @Override
             public void onFinish(String result) {
                 MeetingsContent.addItemsFromString(result);

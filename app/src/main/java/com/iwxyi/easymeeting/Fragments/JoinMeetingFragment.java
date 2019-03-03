@@ -125,7 +125,7 @@ public class JoinMeetingFragment extends Fragment implements View.OnClickListene
                 }
                 String[] params = new String[]{"user_id", User.id(), "lease_id", id};
                 progressDialog = ProgressDialog.show(getActivity(), "请稍等", "正在加入", true, false);
-                ConnectUtil.Go(Paths.getNetpath("joinLease"), params, new StringCallback(){
+                ConnectUtil.Get(Paths.getNetpath("joinLease"), params, new StringCallback(){
                     @Override
                     public void onFinish(String result) {
                         if (result.equals("OK")) {

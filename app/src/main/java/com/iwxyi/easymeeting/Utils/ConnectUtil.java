@@ -26,7 +26,7 @@ public class ConnectUtil implements Runnable {
 
     static String temp_result = "";
 
-    static public void Go(String path, String param[], final Runnable runnable) {
+    static public void Get(String path, String param[], final Runnable runnable) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
@@ -35,10 +35,10 @@ public class ConnectUtil implements Runnable {
                 runnable.run();
             }
         };
-        Go(path, param, 0, handler);
+        Get(path, param, 0, handler);
     }
 
-    static public void Go(String path, String param, final Runnable runnable) {
+    static public void Get(String path, String param, final Runnable runnable) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
@@ -47,10 +47,10 @@ public class ConnectUtil implements Runnable {
                 runnable.run();
             }
         };
-        Go(path, param, 0, handler);
+        Get(path, param, 0, handler);
     }
 
-    static public void Go(String path, final Runnable runnable) {
+    static public void Get(String path, final Runnable runnable) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
@@ -59,7 +59,45 @@ public class ConnectUtil implements Runnable {
                 runnable.run();
             }
         };
-        Go(path, "", 0, handler);
+        Get(path, "", 0, handler);
+    }
+
+    /*******************post*****************/
+
+    static public void Post(String path, String param[], final Runnable runnable) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                temp_result = (String) msg.obj;
+                runnable.run();
+            }
+        };
+        Post(path, param, 0, handler);
+    }
+
+    static public void Post(String path, String param, final Runnable runnable) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                temp_result = (String) msg.obj;
+                runnable.run();
+            }
+        };
+        Post(path, param, 0, handler);
+    }
+
+    static public void Post(String path, final Runnable runnable) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                temp_result = (String) msg.obj;
+                runnable.run();
+            }
+        };
+        Post(path, "", 0, handler);
     }
 
 
@@ -74,57 +112,110 @@ public class ConnectUtil implements Runnable {
      * 一行工具联网并直接运行的工具类
      * @param path              网络路径
      * @param param             参数
-     * @param networkCallback   回调函数
+     * @param stringCallback   回调函数
      */
-    static public void Go(String path, String param[], final StringCallback networkCallback) {
+    static public void Get(String path, String param[], final StringCallback stringCallback) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 String str = (String) msg.obj;
-                networkCallback.onFinish(str);
+                stringCallback.onFinish(str);
                 if (str.isEmpty()) {
-                    networkCallback.onFail(str);
+                    stringCallback.onFail(str);
                 } else {
-                    networkCallback.onSuccess(str);
+                    stringCallback.onSuccess(str);
                 }
             }
         };
-        Go(path, param, 0, handler);
+        Get(path, param, 0, handler);
     }
 
-    static public void Go(String path, String param, final StringCallback networkCallback) {
+    static public void Get(String path, String param, final StringCallback stringCallback) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 String str = (String) msg.obj;
-                networkCallback.onFinish(str);
+                stringCallback.onFinish(str);
                 if (str.isEmpty()) {
-                    networkCallback.onFail(str);
+                    stringCallback.onFail(str);
                 } else {
-                    networkCallback.onSuccess(str);
+                    stringCallback.onSuccess(str);
                 }
             }
         };
-        Go(path, param, 0, handler);
+        Get(path, param, 0, handler);
     }
 
-    static public void Go(String path, final StringCallback networkCallback) {
+    static public void Get(String path, final StringCallback stringCallback) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 String str = (String) msg.obj;
-                networkCallback.onFinish(str);
+                stringCallback.onFinish(str);
                 if (str.isEmpty()) {
-                    networkCallback.onFail(str);
+                    stringCallback.onFail(str);
                 } else {
-                    networkCallback.onSuccess(str);
+                    stringCallback.onSuccess(str);
                 }
             }
         };
-        Go(path, "", 0, handler);
+        Get(path, "", 0, handler);
+    }
+
+     /********************post********************/
+
+     static public void Post(String path, String param[], final StringCallback stringCallback) {
+         @SuppressLint("HandlerLeak")
+         Handler handler = new Handler(){
+             @Override
+             public void handleMessage(Message msg) {
+                 String str = (String) msg.obj;
+                 stringCallback.onFinish(str);
+                 if (str.isEmpty()) {
+                     stringCallback.onFail(str);
+                 } else {
+                     stringCallback.onSuccess(str);
+                 }
+             }
+         };
+         Post(path, param, 0, handler);
+     }
+
+    static public void Post(String path, String param, final StringCallback stringCallback) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                String str = (String) msg.obj;
+                stringCallback.onFinish(str);
+                if (str.isEmpty()) {
+                    stringCallback.onFail(str);
+                } else {
+                    stringCallback.onSuccess(str);
+                }
+            }
+        };
+        Post(path, param, 0, handler);
+    }
+
+    static public void Post(String path, final StringCallback stringCallback) {
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                String str = (String) msg.obj;
+                stringCallback.onFinish(str);
+                if (str.isEmpty()) {
+                    stringCallback.onFail(str);
+                } else {
+                    stringCallback.onSuccess(str);
+                }
+            }
+        };
+        Post(path, "", 0, handler);
     }
 
 
@@ -137,28 +228,54 @@ public class ConnectUtil implements Runnable {
      * @param what    返回的 what，由使用的对象来决定
      * @param handler 要返回的 Handler，进行处理返回的代码
      */
-    static public void Go(String path, String param, int what, Handler handler) {
+    static public void Get(String path, String param, int what, Handler handler) {
         Thread thread = new Thread(new ConnectUtil(path, param, what, handler));
         thread.start();
     }
 
-    static public void Go(String path, String[] param, int what, Handler handler) {
+    static public void Get(String path, String[] param, int what, Handler handler) {
         Thread thread = new Thread(new ConnectUtil(path, param, what, handler));
         thread.start();
     }
 
-    static public void Go(String path, String param, Handler handler) {
+    static public void Get(String path, String param, Handler handler) {
         Thread thread = new Thread(new ConnectUtil(path, param, 0, handler));
         thread.start();
     }
 
-    static public void Go(String path, String param[], Handler handler) {
+    static public void Get(String path, String param[], Handler handler) {
         Thread thread = new Thread(new ConnectUtil(path, param, 0, handler));
         thread.start();
     }
 
-    static public void Go(String path, Handler handler) {
+    static public void Get(String path, Handler handler) {
         Thread thread = new Thread(new ConnectUtil(path, "", 0, handler));
+        thread.start();
+    }
+
+    /*******************post********************/
+    static public void Post(String path, String param, int what, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(path, param, what, handler).post());
+        thread.start();
+    }
+
+    static public void Post(String path, String[] param, int what, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(path, param, what, handler).post());
+        thread.start();
+    }
+
+    static public void Post(String path, String param, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(path, param, 0, handler).post());
+        thread.start();
+    }
+
+    static public void Post(String path, String param[], Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(path, param, 0, handler).post());
+        thread.start();
+    }
+
+    static public void Post(String path, Handler handler) {
+        Thread thread = new Thread(new ConnectUtil(path, "", 0, handler).post());
         thread.start();
     }
 

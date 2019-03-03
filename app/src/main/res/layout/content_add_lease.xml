@@ -128,6 +128,7 @@
             <TextView
                 android:id="@+id/tv_theme"
                 android:text=""
+                android:hint="标题"
                 android:layout_weight="5"
                 android:textAlignment="textStart"
                 android:layout_width="0dp"
@@ -160,6 +161,7 @@
             <TextView
                 android:id="@+id/tv_usage"
                 android:text=""
+                android:hint="具体会议用途，方便公司服务"
                 android:layout_weight="5"
                 android:textAlignment="textStart"
                 android:layout_width="0dp"
@@ -192,7 +194,7 @@
             <TextView
                 android:id="@+id/tv_message"
                 android:text=""
-                android:hint="会议室的要求、服务安排等"
+                android:hint="会议室要求、服务安排等"
                 android:layout_weight="5"
                 android:textAlignment="textStart"
                 android:layout_width="0dp"

@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         User.password = password;
 
         String[] param = {"username", username, "password", password};
-        ConnectUtil.Go(Paths.getNetpath("login"), param, new StringCallback(){
+        ConnectUtil.Post(Paths.getNetpath("login"), param, new StringCallback(){
             @Override
             public void onFinish(String result) {
                 progressDialog.dismiss();

@@ -39,7 +39,7 @@ public class LeasesFragment extends Fragment {
 
     public void refreshLeases() {
         int user_id = User.user_id;
-        ConnectUtil.Go(Paths.getNetpath("leases"), "user_id=" + user_id, new StringCallback(){
+        ConnectUtil.Get(Paths.getNetpath("leases"), "user_id=" + user_id, new StringCallback(){
             @Override
             public void onFinish(String result) {
                 LeaseContent.addItemsFromString(result);

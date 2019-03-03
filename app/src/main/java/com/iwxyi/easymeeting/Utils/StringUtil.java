@@ -90,7 +90,7 @@ public class StringUtil {
      */
     public static boolean getXmlBoolean(String str, String tag) {
         String s = getXml(str, tag);
-        if ("".equals(s)) return false;
+        if ("".equals(s) || "0".equals(s) || "false".equals(s) || "False".equals(s) || "FALSE".equals(s)) return false;
         return "1".equals(s);
     }
 

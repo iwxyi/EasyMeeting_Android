@@ -1,5 +1,6 @@
 package com.iwxyi.easymeeting;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,13 +12,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iwxyi.easymeeting.Globals.App;
+import com.iwxyi.easymeeting.Globals.Paths;
+import com.iwxyi.easymeeting.Utils.ConnectUtil;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 import com.iwxyi.easymeeting.Utils.InputDialog;
 import com.iwxyi.easymeeting.Utils.StringCallback;
+import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class AddLeaseActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private final int RESULT_CODE_ADD = 4; // 跟MainActivity上面的一直
 
     private int start_time = 0, finish_time = 0;
 
@@ -144,6 +151,32 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         boolean entertain = mEntertainCb.isChecked();
         boolean remote = mRemoteCb.isChecked();
 
+        String[] params = new String[]{
+                "start_time", ""+start_time,
+                "finish_time", ""+finish_time,
+                "theme", theme,
+                "usage", usage,
+                "message", message,
+                "sweep", sweep?"1":"0",
+                "entertain", entertain?"1":"0",
+                "remote", remote?"1":"0"
+        };
+
+        final ProgressDialog progressDialog = ProgressDialog.show(this, "正在添加...", "");
+        ConnectUtil.Post(Paths.getNetpath("insertLease"), params, new StringCallback(){
+            @Override
+            public void onFinish(String result) {
+                progressDialog.dismiss();
+                result = StringUtil.getXml(result, "result");
+                if ("OK".equals(result)) {
+                    Toast.makeText(AddLeaseActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    AddLeaseActivity.this.setResult(RESULT_CODE_ADD);
+                    AddLeaseActivity.this.finish();
+                } else {
+                    Toast.makeText(AddLeaseActivity.this, "添加失败" + result, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private int getSuitableTime() {
