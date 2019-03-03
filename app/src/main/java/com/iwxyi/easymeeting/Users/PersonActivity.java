@@ -67,7 +67,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
         mPostTv.setOnClickListener(this);
         mCreditTv = (TextView) findViewById(R.id.tv_credit);
         mCreditTv.setOnClickListener(this);
-        mUsedDayTv = (TextView) findViewById(R.id.tv_usedDay);
+        mUsedDayTv = (TextView) findViewById(R.id.tv_terms);
         mUsedDayTv.setOnClickListener(this);
         mCountTv = (TextView) findViewById(R.id.tv_leaseCount);
         mCountTv.setOnClickListener(this);

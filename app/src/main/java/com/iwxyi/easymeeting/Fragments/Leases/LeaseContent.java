@@ -42,6 +42,7 @@ public class LeaseContent {
         public String admin_name;
         public int start_time;
         public int finish_time;
+        public int num;
         public String theme;
         public String usage;
         public String message;
@@ -55,7 +56,7 @@ public class LeaseContent {
         public int create_time;
         public int update_time;
 
-        public LeaseItem(int lease_id, int room_id, int admin_id, int user_id, String room_name, String admin_name, int start_time, int finish_time, String theme, String usage, String message, boolean sweep, boolean entertain, boolean remote, String circumstance, int admin_score, int user_score, int credit_change, int create_time, int update_time) {
+        public LeaseItem(int lease_id, int room_id, int admin_id, int user_id, String room_name, String admin_name, int num, int start_time, int finish_time, String theme, String usage, String message, boolean sweep, boolean entertain, boolean remote, String circumstance, int admin_score, int user_score, int credit_change, int create_time, int update_time) {
             this.lease_id = lease_id;
             this.room_id = room_id;
             this.admin_id = admin_id;
@@ -64,6 +65,7 @@ public class LeaseContent {
             this.admin_name = admin_name;
             this.start_time = start_time;
             this.finish_time = finish_time;
+            this.num = num;
             this.theme = theme;
             this.usage = usage;
             this.message = message;
@@ -102,6 +104,7 @@ public class LeaseContent {
             this.admin_name = StringUtil.getXml(str, "admin_name");
             this.start_time = StringUtil.getXmlInt(str, "start_time");
             this.finish_time = StringUtil.getXmlInt(str, "finish_time");
+            this.num = StringUtil.getXmlInt(str, "num");
             this.theme = StringUtil.getXml(str, "theme");
             this.usage = StringUtil.getXml(str, "usage");
             this.message = StringUtil.getXml(str, "message");
@@ -125,6 +128,7 @@ public class LeaseContent {
                     + "<admin_name>" + this.admin_name + "</admin_name>"
                     + "<start_time>" + this.start_time + "</start_time>"
                     + "<finish_time>" + this.finish_time + "</finish_time>"
+                    + "<num>" + this.num + "</num>"
                     + "<theme>" + this.theme + "</theme>"
                     + "<usage>" + this.usage + "</usage>"
                     + "<message>" + this.message + "</message>"

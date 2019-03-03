@@ -276,7 +276,8 @@ public class MainActivity extends AppCompatActivity
                     signature = "信用度："+ User.credit;
             }
             mSignatureTv.setText(signature);
-        } else if (resultCode == RESULT_CODE_ADD) {
+        } else if (resultCode == RESULT_CODE_ADD || resultCode == RESULT_CODE_EDIT ||
+                resultCode == RESULT_CODE_DELETE) {
             if (drawerMenuIndex == 1 && leasesFragment != null) {
                 leasesFragment.refreshLeases();
                 leasesFragment.showProgressDialog();
@@ -289,7 +290,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLeaseListInteraction(LeaseContent.LeaseItem item) {
-
+        Intent intent = new Intent(this, AddLeaseActivity.class);
+        intent.putExtra("lease_id", item.lease_id);
+        startActivityForResult(intent, REQUEST_CODE_ADD);
     }
 
     @Override

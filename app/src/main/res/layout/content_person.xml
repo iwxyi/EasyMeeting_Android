@@ -270,7 +270,7 @@
             android:background="@color/colorLightGray" />
 
         <TextView
-            android:id="@+id/tv_usedDay"
+            android:id="@+id/tv_terms"
             android:text="您已经使用了 ？ 天"
             android:gravity="center"
             android:layout_width="match_parent"

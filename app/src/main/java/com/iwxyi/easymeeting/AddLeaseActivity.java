@@ -7,15 +7,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent;
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.Paths;
+import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 import com.iwxyi.easymeeting.Utils.InputDialog;
@@ -24,9 +26,13 @@ import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class AddLeaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final int RESULT_CODE_ADD = 4; // 跟MainActivity上面的一直
+    private final int RESULT_CODE_ADD  = 4; // 跟MainActivity上面的一样
+    private final int RESULT_CODE_Edit = 5; // 跟MainActivity上面的一样
 
     private int start_time = 0, finish_time = 0;
+
+    boolean isModify = false; // 是否是修改的
+    int lease_id = 0, room_id = 0, admin_id = 0;
 
     private TextView mStartTimeTv;
     private TextView mFinishTimeTv;
@@ -37,7 +43,7 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     private CheckBox mSweepCb;
     private CheckBox mEntertainCb;
     private CheckBox mRemoteCb;
-    private TextView mUsedDayTv;
+    private TextView mTermsTv;
     private Button mSignoutBtn;
     private FloatingActionButton mFab;
 
@@ -45,14 +51,39 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_lease);
+        lease_id = getIntent().getIntExtra("lease_id", 0);
+        isModify = (lease_id > 0);
+
         initView();
         initData();
     }
 
     private void initData() {
-        int time = getSuitableTime();
-        start_time = time;
-        finish_time = time + 7200;
+        if (!isModify) {
+            int time = getSuitableTime();
+            start_time = time;
+            finish_time = time + 7200;
+        } else { // 格式化代码
+            LeaseContent.LeaseItem item = LeaseContent.ITEM_MAP.get(lease_id);
+            if (item == null) {
+                Toast.makeText(this, "未能获取到 lease_id", Toast.LENGTH_SHORT).show();
+                return ;
+            }
+            room_id = item.room_id;
+            admin_id = item.admin_id;
+            start_time = item.start_time;
+            finish_time = item.finish_time;
+            mNumTv.setText(""+item.num);
+            mThemeTv.setText(item.theme);
+            mUsageTv.setText(item.usage);
+            mMessageTv.setText(item.message);
+            mSweepCb.setChecked(item.sweep);
+            mEntertainCb.setChecked(item.entertain);
+            mRemoteCb.setChecked(item.remote);
+            mSignoutBtn.setText("提交修改");
+            mTermsTv.setVisibility(View.GONE);
+        }
+
         mStartTimeTv.setText(DateTimeUtil.timestampToString(start_time, "MM-dd HH:mm"));
         mFinishTimeTv.setText(DateTimeUtil.timestampToString(finish_time, "MM-dd HH:mm"));
     }
@@ -70,7 +101,7 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         mSweepCb = (CheckBox) findViewById(R.id.cb_sweep);
         mEntertainCb = (CheckBox) findViewById(R.id.cb_entertain);
         mRemoteCb = (CheckBox) findViewById(R.id.cb_remote);
-        mUsedDayTv = (TextView) findViewById(R.id.tv_usedDay);
+        mTermsTv = (TextView) findViewById(R.id.tv_terms);
         mSignoutBtn = (Button) findViewById(R.id.btn_add_lease);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -93,12 +124,16 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tv_finish_time:// TODO 19/03/03
                 break;
             case R.id.tv_num:
+                if (isModify) {
+                    Toast.makeText(this, "人数以签到表(即加入会议的人)为准，不能修改", Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 InputDialog.inputDialog(this, "请输入本次人数", mNumTv.getText().toString(),
                         InputType.TYPE_CLASS_NUMBER, "\\d+", "请输入正确的人数",
                         new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText) v).setText(result);
+                                mNumTv.setText(result);
                             }
                         });
                 break;
@@ -107,25 +142,25 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
                         new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText) v).setText(result);
+                                mThemeTv.setText(result);
                             }
                         });
                 break;
             case R.id.tv_usage:// TODO 19/03/03
-                InputDialog.inputDialog(this, "请输入本次会议用途", mThemeTv.getText().toString(),
+                InputDialog.inputDialog(this, "请输入本次会议用途", mUsageTv.getText().toString(),
                         new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText) v).setText(result);
+                                mUsageTv.setText(result);
                             }
                         });
                 break;
             case R.id.tv_message:// TODO 19/03/03
-                InputDialog.inputDialog(this, "请输入额外留言", mThemeTv.getText().toString(),
+                InputDialog.inputDialog(this, "请输入额外留言", mMessageTv.getText().toString(),
                         new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText) v).setText(result);
+                                mMessageTv.setText(result);
                             }
                         });
                 break;
@@ -144,6 +179,7 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     private void commit() {
         int start_time = this.start_time;
         int finish_time = this.finish_time;
+        Toast.makeText(this, "start:" + start_time, Toast.LENGTH_SHORT).show();
         String theme = mThemeTv.getText().toString();
         String usage = mUsageTv.getText().toString();
         String message = mMessageTv.getText().toString();
@@ -151,37 +187,59 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         boolean entertain = mEntertainCb.isChecked();
         boolean remote = mRemoteCb.isChecked();
 
+        if (TextUtils.isEmpty(theme)) {
+            Toast.makeText(this, "至少要输入主题", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String[] params = new String[]{
-                "start_time", ""+start_time,
-                "finish_time", ""+finish_time,
+                "lease_id", ""+lease_id,
+                "user_id", User.id(),
+                "start_time", "" + start_time,
+                "finish_time", "" + finish_time,
                 "theme", theme,
                 "usage", usage,
                 "message", message,
-                "sweep", sweep?"1":"0",
-                "entertain", entertain?"1":"0",
-                "remote", remote?"1":"0"
+                "sweep", sweep ? "1" : "0",
+                "entertain", entertain ? "1" : "0",
+                "remote", remote ? "1" : "0",
+                "room_id", ""+room_id,
+                "admin_id", ""+admin_id
         };
 
+        String path = isModify ? Paths.getNetpath("updateLease") : Paths.getNetpath("insertLease");
+
         final ProgressDialog progressDialog = ProgressDialog.show(this, "正在添加...", "");
-        ConnectUtil.Post(Paths.getNetpath("insertLease"), params, new StringCallback(){
+        ConnectUtil.Post(path, params, new StringCallback() {
             @Override
             public void onFinish(String result) {
                 progressDialog.dismiss();
                 result = StringUtil.getXml(result, "result");
-                if ("OK".equals(result)) {
-                    Toast.makeText(AddLeaseActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-                    AddLeaseActivity.this.setResult(RESULT_CODE_ADD);
-                    AddLeaseActivity.this.finish();
+                if (isModify) {
+                    if ("OK".equals(result)) {
+                        Toast.makeText(AddLeaseActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        AddLeaseActivity.this.setResult(RESULT_CODE_Edit);
+                        AddLeaseActivity.this.finish();
+                    } else {
+                        Toast.makeText(AddLeaseActivity.this, "修改失败" + result, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(AddLeaseActivity.this, "添加失败" + result, Toast.LENGTH_SHORT).show();
+                    if ("OK".equals(result)) {
+                        Toast.makeText(AddLeaseActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                        AddLeaseActivity.this.setResult(RESULT_CODE_ADD);
+                        AddLeaseActivity.this.finish();
+                    } else {
+                        Toast.makeText(AddLeaseActivity.this, "添加失败" + result, Toast.LENGTH_SHORT).show();
+                    }
                 }
+
             }
         });
     }
 
     private int getSuitableTime() {
         int timestamp = App.getTimestamp();
-        int hour = DateTimeUtil.getHourFromTimestamp(timestamp); // 必须要加L，不然会溢出
+        int hour = DateTimeUtil.getHourFromTimestamp(timestamp);
         int minute = DateTimeUtil.getMinuteFromTimestamp(timestamp);
 
         // 设置成下一个整点

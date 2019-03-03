@@ -220,14 +220,12 @@
         <CheckBox
             android:id="@+id/cb_entertain"
             android:text="现场招待服务"
-            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
             android:id="@+id/cb_remote"
             android:text="远程视频服务"
-            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -238,7 +236,7 @@
             android:background="@color/colorLightGray" />
 
         <TextView
-            android:id="@+id/tv_usedDay"
+            android:id="@+id/tv_terms"
             android:text="申请 即代表您已阅读并同意我们的“租约条款”"
             android:gravity="center"
             android:layout_width="match_parent"
