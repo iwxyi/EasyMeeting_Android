@@ -29,7 +29,10 @@
             android:name=".Users.PersonActivity"
             android:label="@string/title_activity_person"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddLeaseActivity"></activity>
+        <activity
+            android:name=".AddLeaseActivity"
+            android:label="@string/title_activity_add_lease"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
