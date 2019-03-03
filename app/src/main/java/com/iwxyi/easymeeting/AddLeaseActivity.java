@@ -1,28 +1,21 @@
 package com.iwxyi.easymeeting;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iwxyi.easymeeting.Globals.App;
-import com.iwxyi.easymeeting.Globals.User;
-import com.iwxyi.easymeeting.Users.PersonActivity;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 import com.iwxyi.easymeeting.Utils.InputDialog;
 import com.iwxyi.easymeeting.Utils.StringCallback;
-import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class AddLeaseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,8 +44,10 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
 
     private void initData() {
         int time = getSuitableTime();
-        mStartTimeTv.setText("" + getSuitableTime());
-        mFinishTimeTv.setText(""+time+7200);
+        start_time = time;
+        finish_time = time + 7200;
+        mStartTimeTv.setText(DateTimeUtil.timestampToString(start_time, "MM-dd HH:mm"));
+        mFinishTimeTv.setText(DateTimeUtil.timestampToString(finish_time, "MM-dd HH:mm"));
     }
 
     private void initView() {
@@ -155,9 +150,8 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         int timestamp = App.getTimestamp();
         int hour = DateTimeUtil.getHourFromTimestamp(timestamp); // 必须要加L，不然会溢出
         int minute = DateTimeUtil.getMinuteFromTimestamp(timestamp);
-        Toast.makeText(this, "hour:" + hour + ",minute:" + minute, Toast.LENGTH_SHORT).show();
 
-        // 设置成整点
+        // 设置成下一个整点
         timestamp += 60 * (60 - minute);
         minute = 0;
         hour++;
@@ -166,7 +160,22 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         hour++;
         timestamp += 3600;
 
-        return 0;
+        // 判断是否符合开会的时间
+        if (hour >= 10 && hour <= 14) {
+            timestamp += 3600 * (14 - hour);
+            hour = 14;
+        } else if (hour > 16 && hour < 18) {
+            timestamp += 3600 * (19 - hour);
+            hour = 19;
+        } else if (hour >= 20 && hour < 24) { // 晚上
+            timestamp += 3600 * (24 - hour + 8); // 设置成明早8点
+            hour = 8;
+        } else if (hour >= 24) { // 23:??, 设置为明早8点
+            timestamp += 3600 * (8 + 24 - hour);
+            hour = 8;
+        }
+
+        return timestamp;
     }
 
 }

@@ -46,7 +46,7 @@ public class MyLeasesRecyclerViewAdapter extends RecyclerView.Adapter<MyLeasesRe
         holder.mItem = item;
         holder.mThemeView.setText(item.theme);
         holder.mUsageView.setText(item.usage);
-        holder.mTimeView.setText(DateTimeUtil.longToString(item.start_time, "MM-dd HH:mm"));
+        holder.mTimeView.setText(DateTimeUtil.timestampToString(item.start_time, "MM-dd HH:mm"));
         holder.mRoomView.setText(item.room_name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent;
 import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsFragment.OnMeetingListInteractionListener;
 import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsContent.MeetingItem;
 import com.iwxyi.easymeeting.R;
@@ -47,7 +46,7 @@ public class MyMeetingsRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetin
         holder.mItem = item;
         holder.mThemeView.setText(item.theme);
         holder.mUsageView.setText(item.usage);
-        holder.mTimeView.setText(DateTimeUtil.longToString(item.start_time, "MM-dd HH:mm"));
+        holder.mTimeView.setText(DateTimeUtil.timestampToString(item.start_time, "MM-dd HH:mm"));
         holder.mRoomView.setText(item.room_name);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
