@@ -26,6 +26,75 @@ public class DateTimeUtil {
         return System.currentTimeMillis();
     }
 
+    /***************************************************************/
+
+    /**
+     * 时间戳转换到年
+     * @param timestamp 时间戳
+     * @return 年
+     */
+    public static int getYearFromTimestamp(int timestamp) {
+        if (timestamp == 0) return 0;
+        long l = timestamp * 1000L;
+        String s = null;
+        s = longToString(l, "yyyy");
+        return Integer.parseInt(s);
+    }
+
+    /**
+     * 时间戳转换到月
+     * @param timestamp 时间戳
+     * @return 月
+     */
+    public static int getMonthFromTimestamp(int timestamp) {
+        if (timestamp == 0) return 0;
+        long l = timestamp * 1000L;
+        String s = null;
+        s = longToString(l, "MM"); // 大写M是月份，小写m是分钟
+        return Integer.parseInt(s);
+    }
+
+    /**
+     * 时间戳转换到日
+     * @param timestamp 时间戳
+     * @return 日
+     */
+    public static int getDateFromTimestamp(int timestamp) {
+        if (timestamp == 0) return 0;
+        long l = timestamp * 1000L;
+        String s = null;
+        s = longToString(l, "dd");
+        return Integer.parseInt(s);
+    }
+
+    /**
+     * 时间戳转换到小时
+     * @param timestamp 时间戳
+     * @return 小时
+     */
+    public static int getHourFromTimestamp(int timestamp) {
+        if (timestamp == 0) return 0;
+        long l = timestamp * 1000L;
+        String s = null;
+        s = longToString(l, "hh"); // 大写HH是24小时制
+        return Integer.parseInt(s);
+    }
+
+    /**
+     * 时间戳转换到分钟
+     * @param timestamp 时间戳
+     * @return 分钟
+     */
+    public static int getMinuteFromTimestamp(int timestamp) {
+        if (timestamp == 0) return 0;
+        long l = timestamp * 1000L;
+        String s = null;
+        s = longToString(l, "mm");
+        return Integer.parseInt(s);
+    }
+
+    /***********************************************************************************/
+
     /**
      * 时间戳转换到年
      * @param timestamp 时间戳
@@ -70,7 +139,7 @@ public class DateTimeUtil {
     public static int getHourFromTimestamp(long timestamp) {
         if (timestamp == 0) return 0;
         String s = null;
-        s = longToString(timestamp, "hh");
+        s = longToString(timestamp, "hh"); // 大写HH是24小时制
         return Integer.parseInt(s);
     }
 
@@ -97,6 +166,8 @@ public class DateTimeUtil {
         s = longToString(timestamp, "ss");
         return Integer.parseInt(s);
     }
+
+    /*******************************************************************/
 
     /**
      * 散落的数字转换成文本（填充0）
@@ -152,6 +223,8 @@ public class DateTimeUtil {
         d = stringToDate(o, "yyyy-MM-dd HH:mm:ss");
         return d.getTime();
     }
+
+    /******************************************************************************/
 
     // currentTime要转换的long类型的时间
     // formatType要转换的string类型的时间格式

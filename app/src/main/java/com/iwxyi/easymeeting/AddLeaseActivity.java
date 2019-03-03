@@ -19,13 +19,15 @@ import android.widget.Toast;
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.Users.PersonActivity;
+import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 import com.iwxyi.easymeeting.Utils.InputDialog;
 import com.iwxyi.easymeeting.Utils.StringCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class AddLeaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    int start_time = 0, end_time = 0;
+    private int start_time = 0, finish_time = 0;
+
     private TextView mStartTimeTv;
     private TextView mFinishTimeTv;
     private TextView mNumTv;
@@ -48,9 +50,9 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initData() {
-        int time = App.getTimestamp();
-        mStartTimeTv.setText(""+time);
-        mFinishTimeTv.setText(""+time);
+        int time = getSuitableTime();
+        mStartTimeTv.setText("" + getSuitableTime());
+        mFinishTimeTv.setText(""+time+7200);
     }
 
     private void initView() {
@@ -91,42 +93,42 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tv_num:
                 InputDialog.inputDialog(this, "请输入本次人数", mNumTv.getText().toString(),
                         InputType.TYPE_CLASS_NUMBER, "\\d+", "请输入正确的人数",
-                        new StringCallback(){
+                        new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText)v).setText(result);
+                                ((EditText) v).setText(result);
                             }
                         });
                 break;
             case R.id.tv_theme:// TODO 19/03/03
                 InputDialog.inputDialog(this, "请输入本次会议主题", mThemeTv.getText().toString(),
-                        new StringCallback(){
+                        new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText)v).setText(result);
+                                ((EditText) v).setText(result);
                             }
                         });
                 break;
             case R.id.tv_usage:// TODO 19/03/03
                 InputDialog.inputDialog(this, "请输入本次会议用途", mThemeTv.getText().toString(),
-                        new StringCallback(){
+                        new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText)v).setText(result);
+                                ((EditText) v).setText(result);
                             }
                         });
                 break;
             case R.id.tv_message:// TODO 19/03/03
                 InputDialog.inputDialog(this, "请输入额外留言", mThemeTv.getText().toString(),
-                        new StringCallback(){
+                        new StringCallback() {
                             @Override
                             public void onFinish(String result) {
-                                ((EditText)v).setText(result);
+                                ((EditText) v).setText(result);
                             }
                         });
                 break;
             case R.id.btn_add_lease:
-
+                commit();
                 break;
             case R.id.fab:
                 Snackbar.make(v, "请仔细阅读租约条款", Snackbar.LENGTH_LONG)
@@ -137,7 +139,34 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    boolean canMatch(String str, String pat) {
-        return StringUtil.canMatch(str, pat);
+    private void commit() {
+        int start_time = this.start_time;
+        int finish_time = this.finish_time;
+        String theme = mThemeTv.getText().toString();
+        String usage = mUsageTv.getText().toString();
+        String message = mMessageTv.getText().toString();
+        boolean sweep = mSweepCb.isChecked();
+        boolean entertain = mEntertainCb.isChecked();
+        boolean remote = mRemoteCb.isChecked();
+
     }
+
+    private int getSuitableTime() {
+        int timestamp = App.getTimestamp();
+        int hour = DateTimeUtil.getHourFromTimestamp(timestamp); // 必须要加L，不然会溢出
+        int minute = DateTimeUtil.getMinuteFromTimestamp(timestamp);
+        Toast.makeText(this, "hour:" + hour + ",minute:" + minute, Toast.LENGTH_SHORT).show();
+
+        // 设置成整点
+        timestamp += 60 * (60 - minute);
+        minute = 0;
+        hour++;
+
+        // 再设置成一小时后
+        hour++;
+        timestamp += 3600;
+
+        return 0;
+    }
+
 }
