@@ -2,7 +2,7 @@ package com.iwxyi.easymeeting.Utils;
 
 import android.text.TextUtils;
 
-public class NetworkCallback {
+public class StringCallback {
 
     public void onFinish(String result) {
     }

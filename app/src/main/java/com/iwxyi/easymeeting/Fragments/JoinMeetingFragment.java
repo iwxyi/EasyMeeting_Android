@@ -1,12 +1,9 @@
 package com.iwxyi.easymeeting.Fragments;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,7 +17,7 @@ import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
-import com.iwxyi.easymeeting.Utils.NetworkCallback;
+import com.iwxyi.easymeeting.Utils.StringCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 /**
@@ -128,7 +125,7 @@ public class JoinMeetingFragment extends Fragment implements View.OnClickListene
                 }
                 String[] params = new String[]{"user_id", User.id(), "lease_id", id};
                 progressDialog = ProgressDialog.show(getActivity(), "请稍等", "正在加入", true, false);
-                ConnectUtil.Go(Paths.getNetpath("joinLease"), params, new NetworkCallback(){
+                ConnectUtil.Go(Paths.getNetpath("joinLease"), params, new StringCallback(){
                     @Override
                     public void onFinish(String result) {
                         if (result.equals("OK")) {

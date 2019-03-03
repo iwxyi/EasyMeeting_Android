@@ -289,7 +289,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/btn_signout"
+            android:id="@+id/btn_add_lease"
             android:text="退出登录"
             android:background="@color/colorPrimaryDark"
             android:textColor="@color/colorWhite"

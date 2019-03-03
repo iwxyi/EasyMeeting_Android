@@ -1,10 +1,7 @@
 package com.iwxyi.easymeeting.Users;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -22,7 +19,7 @@ import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
-import com.iwxyi.easymeeting.Utils.NetworkCallback;
+import com.iwxyi.easymeeting.Utils.StringCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class PersonActivity extends AppCompatActivity implements View.OnClickListener {
@@ -74,7 +71,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
         mUsedDayTv.setOnClickListener(this);
         mCountTv = (TextView) findViewById(R.id.tv_leaseCount);
         mCountTv.setOnClickListener(this);
-        mSignoutBtn = (Button) findViewById(R.id.btn_signout);
+        mSignoutBtn = (Button) findViewById(R.id.btn_add_lease);
         mSignoutBtn.setOnClickListener(this);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(this);
@@ -130,7 +127,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.tv_credit:
                 App.toast("用户信用程度，数值越大则优先权越高，并享有一定的价格折扣");
                 break;
-            case R.id.btn_signout:
+            case R.id.btn_add_lease:
                 Toast.makeText(this, "当前为演示模式，无法退出", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fab:
@@ -242,7 +239,7 @@ public class PersonActivity extends AppCompatActivity implements View.OnClickLis
     private void updateContent(final String key, final String val) {
         String path = Paths.getNetpath("updateUserInfo");
         String[] params = new String[]{"user_id", User.id(), key, val};
-        ConnectUtil.Go(path, params, new NetworkCallback(){
+        ConnectUtil.Go(path, params, new StringCallback(){
             @Override
             public void onFinish(String result) {
                 if (result.equals("OK")) {

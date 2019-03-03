@@ -76,7 +76,7 @@ public class ConnectUtil implements Runnable {
      * @param param             参数
      * @param networkCallback   回调函数
      */
-    static public void Go(String path, String param[], final NetworkCallback networkCallback) {
+    static public void Go(String path, String param[], final StringCallback networkCallback) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
@@ -93,7 +93,7 @@ public class ConnectUtil implements Runnable {
         Go(path, param, 0, handler);
     }
 
-    static public void Go(String path, String param, final NetworkCallback networkCallback) {
+    static public void Go(String path, String param, final StringCallback networkCallback) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
@@ -110,7 +110,7 @@ public class ConnectUtil implements Runnable {
         Go(path, param, 0, handler);
     }
 
-    static public void Go(String path, final NetworkCallback networkCallback) {
+    static public void Go(String path, final StringCallback networkCallback) {
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override

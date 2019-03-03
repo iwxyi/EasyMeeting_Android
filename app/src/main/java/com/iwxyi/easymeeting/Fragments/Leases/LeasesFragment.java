@@ -1,11 +1,8 @@
 package com.iwxyi.easymeeting.Fragments.Leases;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +17,7 @@ import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Fragments.Leases.LeaseContent.LeaseItem;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
-import com.iwxyi.easymeeting.Utils.NetworkCallback;
+import com.iwxyi.easymeeting.Utils.StringCallback;
 
 /**
  * A fragment representing a list of Items.
@@ -42,7 +39,7 @@ public class LeasesFragment extends Fragment {
 
     public void refreshLeases() {
         int user_id = User.user_id;
-        ConnectUtil.Go(Paths.getNetpath("leases"), "user_id=" + user_id, new NetworkCallback(){
+        ConnectUtil.Go(Paths.getNetpath("leases"), "user_id=" + user_id, new StringCallback(){
             @Override
             public void onFinish(String result) {
                 LeaseContent.addItemsFromString(result);

@@ -1,6 +1,5 @@
 package com.iwxyi.easymeeting.Users;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ import com.iwxyi.easymeeting.Globals.Paths;
 import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.R;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
-import com.iwxyi.easymeeting.Utils.NetworkCallback;
+import com.iwxyi.easymeeting.Utils.StringCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class LoginActivity extends AppCompatActivity {
@@ -67,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         User.password = password;
 
         String[] param = {"username", username, "password", password};
-        ConnectUtil.Go(Paths.getNetpath("login"), param, new NetworkCallback(){
+        ConnectUtil.Go(Paths.getNetpath("login"), param, new StringCallback(){
             @Override
             public void onFinish(String result) {
                 progressDialog.dismiss();
