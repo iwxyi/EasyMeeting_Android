@@ -1,6 +1,8 @@
 package com.iwxyi.easymeeting;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,8 +28,9 @@ import com.iwxyi.easymeeting.Utils.StringUtil;
 
 public class AddLeaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private final int RESULT_CODE_ADD  = 4; // 跟MainActivity上面的一样
+    private final int RESULT_CODE_ADD = 4; // 跟MainActivity上面的一样
     private final int RESULT_CODE_Edit = 5; // 跟MainActivity上面的一样
+    private final int RESULT_CODE_DELETE = 6; // 跟MainActivity上面的一样
 
     private int start_time = 0, finish_time = 0;
 
@@ -58,36 +61,6 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         initData();
     }
 
-    private void initData() {
-        if (!isModify) {
-            int time = getSuitableTime();
-            start_time = time;
-            finish_time = time + 7200;
-        } else { // 格式化代码
-            LeaseContent.LeaseItem item = LeaseContent.ITEM_MAP.get(lease_id);
-            if (item == null) {
-                Toast.makeText(this, "未能获取到 lease_id", Toast.LENGTH_SHORT).show();
-                return ;
-            }
-            room_id = item.room_id;
-            admin_id = item.admin_id;
-            start_time = item.start_time;
-            finish_time = item.finish_time;
-            mNumTv.setText(""+item.num);
-            mThemeTv.setText(item.theme);
-            mUsageTv.setText(item.usage);
-            mMessageTv.setText(item.message);
-            mSweepCb.setChecked(item.sweep);
-            mEntertainCb.setChecked(item.entertain);
-            mRemoteCb.setChecked(item.remote);
-            mSignoutBtn.setText("提交修改");
-            mTermsTv.setVisibility(View.GONE);
-        }
-
-        mStartTimeTv.setText(DateTimeUtil.timestampToString(start_time, "MM-dd HH:mm"));
-        mFinishTimeTv.setText(DateTimeUtil.timestampToString(finish_time, "MM-dd HH:mm"));
-    }
-
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -104,6 +77,7 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         mTermsTv = (TextView) findViewById(R.id.tv_terms);
         mSignoutBtn = (Button) findViewById(R.id.btn_add_lease);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_delete));
 
         mSignoutBtn.setOnClickListener(this);
         mStartTimeTv.setOnClickListener(this);
@@ -113,6 +87,36 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         mUsageTv.setOnClickListener(this);
         mMessageTv.setOnClickListener(this);
         mFab.setOnClickListener(this);
+    }
+
+    private void initData() {
+        if (!isModify) {
+            int time = getSuitableTime();
+            start_time = time;
+            finish_time = time + 7200;
+        } else { // 格式化代码
+            LeaseContent.LeaseItem item = LeaseContent.ITEM_MAP.get(lease_id);
+            if (item == null) {
+                Toast.makeText(this, "未能获取到 lease_id", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            room_id = item.room_id;
+            admin_id = item.admin_id;
+            start_time = item.start_time;
+            finish_time = item.finish_time;
+            mNumTv.setText("" + item.num);
+            mThemeTv.setText(item.theme);
+            mUsageTv.setText(item.usage);
+            mMessageTv.setText(item.message);
+            mSweepCb.setChecked(item.sweep);
+            mEntertainCb.setChecked(item.entertain);
+            mRemoteCb.setChecked(item.remote);
+            mSignoutBtn.setText("提交修改");
+            mTermsTv.setVisibility(View.GONE);
+        }
+
+        mStartTimeTv.setText(DateTimeUtil.timestampToString(start_time, "MM-dd HH:mm"));
+        mFinishTimeTv.setText(DateTimeUtil.timestampToString(finish_time, "MM-dd HH:mm"));
     }
 
 
@@ -126,7 +130,7 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tv_num:
                 if (isModify) {
                     Toast.makeText(this, "人数以签到表(即加入会议的人)为准，不能修改", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
                 InputDialog.inputDialog(this, "请输入本次人数", mNumTv.getText().toString(),
                         InputType.TYPE_CLASS_NUMBER, "\\d+", "请输入正确的人数",
@@ -168,8 +172,41 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
                 commit();
                 break;
             case R.id.fab:
-                Snackbar.make(v, "请仔细阅读租约条款", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (!isModify) {
+                    Snackbar.make(v, "请仔细阅读租约条款", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return;
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("提示");
+                builder.setMessage("是否确认删除？\n删除的租约将无法恢复");
+                builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ConnectUtil.Get(Paths.getNetpath("deleteLease"), "lease_id=" + lease_id,
+                                new StringCallback() {
+                                    @Override
+                                    public void onFinish(String result) {
+                                        result = StringUtil.getXml(result, "result");
+                                        if ("OK".equals(result)) {
+                                            Toast.makeText(AddLeaseActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                            AddLeaseActivity.this.setResult(RESULT_CODE_DELETE);
+                                            AddLeaseActivity.this.finish();
+                                        } else {
+                                            Toast.makeText(AddLeaseActivity.this, "删除失败" + result, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+
                 break;
             default:
                 break;
@@ -193,7 +230,7 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         }
 
         String[] params = new String[]{
-                "lease_id", ""+lease_id,
+                "lease_id", "" + lease_id,
                 "user_id", User.id(),
                 "start_time", "" + start_time,
                 "finish_time", "" + finish_time,
@@ -203,8 +240,8 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
                 "sweep", sweep ? "1" : "0",
                 "entertain", entertain ? "1" : "0",
                 "remote", remote ? "1" : "0",
-                "room_id", ""+room_id,
-                "admin_id", ""+admin_id
+                "room_id", "" + room_id,
+                "admin_id", "" + admin_id
         };
 
         String path = isModify ? Paths.getNetpath("updateLease") : Paths.getNetpath("insertLease");
