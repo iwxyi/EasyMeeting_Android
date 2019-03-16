@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateTimeUtil {
@@ -25,7 +26,7 @@ public class DateTimeUtil {
         return System.currentTimeMillis();
     }
 
-    /***************************************************************/
+    /********************************10位时间戳转具体数值**********************************/
 
     /**
      * 时间戳转换到年
@@ -105,7 +106,7 @@ public class DateTimeUtil {
         return Integer.parseInt(s);
     }
 
-    /***********************************************************************************/
+    /************************************13位时间戳转具体数值************************************/
 
     /**
      * 时间戳转换到年
@@ -179,7 +180,7 @@ public class DateTimeUtil {
         return Integer.parseInt(s);
     }
 
-    /*******************************************************************/
+    /**************************字符串转换*******************************/
 
     /**
      * 散落的数字转换成文本（填充0）
@@ -281,5 +282,37 @@ public class DateTimeUtil {
             e.printStackTrace();
         }
         return date;
+    }
+
+    /*********************************获取具体的数值**********************************/
+
+    public static int getYear() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public static int getMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public static int getDate() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DATE);
+    }
+
+    public static int getHour() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.HOUR);
+    }
+
+    public static int getMinute() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.MINUTE);
+    }
+
+    public static int getSecond() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.SECOND);
     }
 }

@@ -23,8 +23,11 @@ import com.iwxyi.easymeeting.Globals.User;
 import com.iwxyi.easymeeting.Utils.ConnectUtil;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
 import com.iwxyi.easymeeting.Utils.InputDialog;
+import com.iwxyi.easymeeting.Utils.SettingsUtil;
 import com.iwxyi.easymeeting.Utils.StringCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
+
+import net.steamcrafted.lineartimepicker.dialog.LinearDatePickerDialog;
 
 public class AddLeaseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -79,6 +82,8 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_delete));
 
+        mStartTimeTv.setOnClickListener(this);
+        mFinishTimeTv.setOnClickListener(this);
         mSignoutBtn.setOnClickListener(this);
         mStartTimeTv.setOnClickListener(this);
         mFinishTimeTv.setOnClickListener(this);
@@ -90,10 +95,11 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initData() {
-        if (!isModify) {
+        if (!isModify) { // 添加租约
             int time = getSuitableTime();
             start_time = time;
             finish_time = time + 7200;
+            mFab.hide();
         } else { // 格式化代码
             LeaseContent.LeaseItem item = LeaseContent.ITEM_MAP.get(lease_id);
             if (item == null) {
@@ -124,8 +130,30 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.tv_start_time:// TODO 19/03/03
+                boolean data_tutorial = false;
+                if (App.getInt("LinearDatePicker_tutorial") != 1) {
+                    data_tutorial = true;
+                }
+                LinearDatePickerDialog.Builder.with(AddLeaseActivity.this)
+                        .setYear(DateTimeUtil.getYearFromTimestamp(DateTimeUtil.getTimestamp()))
+                        .setMinYear(2000)
+                        .setMaxYear(2030)
+                        .setShowTutorial(data_tutorial)
+                        .setButtonCallback(new LinearDatePickerDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(DialogInterface dialog, int year, int month, int day) {
+
+                                App.setVal("LeanrDataPicker_tutorial", 1);
+                            }
+
+                            @Override
+                            public void onNegative(DialogInterface dialog) {
+
+                            }
+                        }).build().show();
                 break;
             case R.id.tv_finish_time:// TODO 19/03/03
+
                 break;
             case R.id.tv_num:
                 if (isModify) {
@@ -216,7 +244,6 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     private void commit() {
         int start_time = this.start_time;
         int finish_time = this.finish_time;
-        Toast.makeText(this, "start:" + start_time, Toast.LENGTH_SHORT).show();
         String theme = mThemeTv.getText().toString();
         String usage = mUsageTv.getText().toString();
         String message = mMessageTv.getText().toString();
@@ -225,7 +252,7 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         boolean remote = mRemoteCb.isChecked();
 
         if (TextUtils.isEmpty(theme)) {
-            Toast.makeText(this, "至少要输入主题", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请输入主题", Toast.LENGTH_SHORT).show();
             return;
         }
 
