@@ -28,6 +28,7 @@ import com.iwxyi.easymeeting.Utils.StringCallback;
 import com.iwxyi.easymeeting.Utils.StringUtil;
 
 import net.steamcrafted.lineartimepicker.dialog.LinearDatePickerDialog;
+import net.steamcrafted.lineartimepicker.dialog.LinearTimePickerDialog;
 
 public class AddLeaseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,11 +37,15 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
     private final int RESULT_CODE_DELETE = 6; // 跟MainActivity上面的一样
 
     private int start_time = 0, finish_time = 0;
+    private int s_year = 0, s_month = 0, s_date = 0, s_hour = 0, s_minute = 0;
+    private int f_year = 0, f_month = 0, f_date = 0, f_hour = 0, f_minute = 0;
 
     boolean isModify = false; // 是否是修改的
     int lease_id = 0, room_id = 0, admin_id = 0;
 
+    private TextView mStartDateTv;
     private TextView mStartTimeTv;
+    private TextView mFinishDateTv;
     private TextView mFinishTimeTv;
     private TextView mNumTv;
     private TextView mThemeTv;
@@ -68,7 +73,9 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mStartDateTv = (TextView) findViewById(R.id.tv_start_date);
         mStartTimeTv = (TextView) findViewById(R.id.tv_start_time);
+        mFinishDateTv = (TextView) findViewById(R.id.tv_finish_date);
         mFinishTimeTv = (TextView) findViewById(R.id.tv_finish_time);
         mNumTv = (TextView) findViewById(R.id.tv_num);
         mThemeTv = (TextView) findViewById(R.id.tv_theme);
@@ -82,7 +89,9 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setImageDrawable(getResources().getDrawable(R.drawable.ic_delete));
 
+        mStartDateTv.setOnClickListener(this);
         mStartTimeTv.setOnClickListener(this);
+        mFinishDateTv.setOnClickListener(this);
         mFinishTimeTv.setOnClickListener(this);
         mSignoutBtn.setOnClickListener(this);
         mStartTimeTv.setOnClickListener(this);
@@ -121,29 +130,42 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
             mTermsTv.setVisibility(View.GONE);
         }
 
-        mStartTimeTv.setText(DateTimeUtil.timestampToString(start_time, "MM-dd HH:mm"));
-        mFinishTimeTv.setText(DateTimeUtil.timestampToString(finish_time, "MM-dd HH:mm"));
+        s_year = DateTimeUtil.getYearFromTimestamp(start_time);
+        s_month = DateTimeUtil.getMonthFromTimestamp(start_time);
+        s_date = DateTimeUtil.getDateFromTimestamp(start_time);
+        s_hour = DateTimeUtil.getHourFromTimestamp(start_time);
+        s_minute = DateTimeUtil.getMinuteFromTimestamp(start_time);
+        f_year = DateTimeUtil.getYearFromTimestamp(finish_time);
+        f_month = DateTimeUtil.getMonthFromTimestamp(finish_time);
+        f_date = DateTimeUtil.getDateFromTimestamp(finish_time);
+        f_hour = DateTimeUtil.getHourFromTimestamp(finish_time);
+        f_minute = DateTimeUtil.getMinuteFromTimestamp(finish_time);
+        refreshTimestampShowed();
     }
 
 
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            case R.id.tv_start_time:// TODO 19/03/03
-                boolean data_tutorial = false;
+            case R.id.tv_start_date:
+                boolean s_data_tutorial = false;
                 if (App.getInt("LinearDatePicker_tutorial") != 1) {
-                    data_tutorial = true;
+                    s_data_tutorial = true;
                 }
                 LinearDatePickerDialog.Builder.with(AddLeaseActivity.this)
-                        .setYear(DateTimeUtil.getYearFromTimestamp(DateTimeUtil.getTimestamp()))
+                        .setYear(s_year)
                         .setMinYear(2000)
                         .setMaxYear(2030)
-                        .setShowTutorial(data_tutorial)
+                        .setShowTutorial(s_data_tutorial)
                         .setButtonCallback(new LinearDatePickerDialog.ButtonCallback() {
                             @Override
                             public void onPositive(DialogInterface dialog, int year, int month, int day) {
-
-                                App.setVal("LeanrDataPicker_tutorial", 1);
+                                App.setVal("LinearDatePicker_tutorial", 1);
+                                s_year = year;
+                                s_month = month;
+                                s_date = day;
+                                refreshTimestamp();
+                                refreshTimestampShowed();
                             }
 
                             @Override
@@ -152,8 +174,80 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
                             }
                         }).build().show();
                 break;
-            case R.id.tv_finish_time:// TODO 19/03/03
+            case R.id.tv_start_time:
+                boolean s_time_tutorial = false;
+                if (SettingsUtil.getInt(getApplicationContext(), "LinearTimePicker_tutorial") != 1) {
+                    s_time_tutorial = true;
+                }
+                LinearTimePickerDialog.Builder.with(AddLeaseActivity.this)
+                        .setShowTutorial(s_time_tutorial)
+                        .setButtonCallback(new LinearTimePickerDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(DialogInterface dialog, int hour, int minutes) {
+                                SettingsUtil.setVal(getApplicationContext(), "LinearTimePicker_tutorial", 1);
+                                s_hour = hour;
+                                s_minute = minutes;
+                                refreshTimestamp();
+                                refreshTimestampShowed();
+                            }
 
+                            @Override
+                            public void onNegative(DialogInterface dialog) {
+
+                            }
+                        })
+                        .build().show();
+                break;
+            case R.id.tv_finish_date:
+                boolean f_data_tutorial = false;
+                if (App.getInt("LinearDatePicker_tutorial") != 1) {
+                    f_data_tutorial = true;
+                }
+                LinearDatePickerDialog.Builder.with(AddLeaseActivity.this)
+                        .setYear(s_year)
+                        .setMinYear(2000)
+                        .setMaxYear(2030)
+                        .setShowTutorial(f_data_tutorial)
+                        .setButtonCallback(new LinearDatePickerDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(DialogInterface dialog, int year, int month, int day) {
+                                App.setVal("LinearDatePicker_tutorial", 1);
+                                f_year = year;
+                                f_month = month;
+                                f_date = day;
+                                refreshTimestamp();
+                                refreshTimestampShowed();
+                            }
+
+                            @Override
+                            public void onNegative(DialogInterface dialog) {
+
+                            }
+                        }).build().show();
+                break;
+            case R.id.tv_finish_time:
+                boolean f_time_tutorial = false;
+                if (SettingsUtil.getInt(getApplicationContext(), "LinearTimePicker_tutorial") != 1) {
+                    f_time_tutorial = true;
+                }
+                LinearTimePickerDialog.Builder.with(AddLeaseActivity.this)
+                        .setShowTutorial(f_time_tutorial)
+                        .setButtonCallback(new LinearTimePickerDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(DialogInterface dialog, int hour, int minutes) {
+                                SettingsUtil.setVal(getApplicationContext(), "LinearTimePicker_tutorial", 1);
+                                f_hour = hour;
+                                f_minute = minutes;
+                                refreshTimestamp();
+                                refreshTimestampShowed();
+                            }
+
+                            @Override
+                            public void onNegative(DialogInterface dialog) {
+
+                            }
+                        })
+                        .build().show();
                 break;
             case R.id.tv_num:
                 if (isModify) {
@@ -301,6 +395,25 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+    private void refreshTimestamp() {
+        start_time = DateTimeUtil.valuesToTimestamp(s_year, s_month, s_date, s_hour, s_minute);
+        finish_time = DateTimeUtil.valuesToTimestamp(f_year, f_month, f_date, f_hour, f_minute);
+    }
+
+    /**
+     * 通过时间戳刷新开始时间和结束时间
+     */
+    private void refreshTimestampShowed() {
+        mStartDateTv.setText(DateTimeUtil.timestampToString(start_time, "MM-dd"));
+        mStartTimeTv.setText(DateTimeUtil.timestampToString(start_time, "HH:mm"));
+        mFinishDateTv.setText(DateTimeUtil.timestampToString(finish_time, "MM-dd"));
+        mFinishTimeTv.setText(DateTimeUtil.timestampToString(finish_time, "HH:mm"));
+    }
+
+    /**
+     * 获取合适的开会日期(与网站上的一样)
+     * @return
+     */
     private int getSuitableTime() {
         int timestamp = App.getTimestamp();
         int hour = DateTimeUtil.getHourFromTimestamp(timestamp);

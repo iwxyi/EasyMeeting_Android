@@ -20,13 +20,25 @@
             android:orientation="horizontal">
             <TextView
                 android:text="会议开始时间："
-                android:layout_weight="3"
+                android:layout_weight="6"
                 android:textAlignment="textEnd"
                 android:labelFor="@id/tv_nickname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_marginLeft="7dp"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_start_date"
+                android:text="开始时间"
+                android:layout_weight="5"
+                android:textAlignment="textEnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="1dp"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_start_time"
@@ -35,8 +47,7 @@
                 android:textAlignment="textStart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="7dp"
+                android:layout_marginVertical="5dp"
                 android:textSize="18sp"/>
         </LinearLayout>
 
@@ -52,7 +63,7 @@
             android:orientation="horizontal">
             <TextView
                 android:text="会议结束时间："
-                android:layout_weight="3"
+                android:layout_weight="6"
                 android:textAlignment="textEnd"
                 android:labelFor="@id/tv_nickname"
                 android:layout_width="0dp"
@@ -61,14 +72,24 @@
                 android:layout_marginLeft="7dp"
                 android:textSize="18sp"/>
             <TextView
+                android:id="@+id/tv_finish_date"
+                android:text="结束时间"
+                android:layout_weight="5"
+                android:textAlignment="textEnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="1dp"
+                android:textSize="18sp"/>
+            <TextView
                 android:id="@+id/tv_finish_time"
                 android:text="结束时间"
                 android:layout_weight="5"
                 android:textAlignment="textStart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="7dp"
+                android:layout_marginVertical="5dp"
                 android:textSize="18sp"/>
         </LinearLayout>
 
