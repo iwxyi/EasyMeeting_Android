@@ -28,6 +28,7 @@ import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsContent;
 import com.iwxyi.easymeeting.Fragments.Meetings.MeetingsFragment;
 import com.iwxyi.easymeeting.Globals.App;
 import com.iwxyi.easymeeting.Globals.User;
+import com.iwxyi.easymeeting.SettingsActivitys.SettingsActivity;
 import com.iwxyi.easymeeting.Users.LoginActivity;
 import com.iwxyi.easymeeting.Users.PersonActivity;
 import com.iwxyi.easymeeting.Utils.DateTimeUtil;
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         } else if (id == R.id.action_refresh) {
             if (drawerMenuIndex == 1) {
