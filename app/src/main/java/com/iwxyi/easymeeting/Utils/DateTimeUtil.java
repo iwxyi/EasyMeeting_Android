@@ -180,7 +180,7 @@ public class DateTimeUtil {
         return Integer.parseInt(s);
     }
 
-    /**************************字符串转换*******************************/
+    /**************************转换成字符串*******************************/
 
     /**
      * 散落的数字转换成文本（填充0）
@@ -189,7 +189,7 @@ public class DateTimeUtil {
      * @param date
      * @return
      */
-    public static String dataToString(int year, int month, int date) {
+    public static String dateToString(int year, int month, int date) {
         String rst = year + "/";
         if (month < 10)
             rst += "0";
@@ -198,6 +198,10 @@ public class DateTimeUtil {
             rst += "0";
         rst += date;
         return rst;
+    }
+
+    public static String valuesToString(int year, int month, int date) {
+        return dateToString(year, month, date);
     }
 
     /**
@@ -217,6 +221,16 @@ public class DateTimeUtil {
         return rst;
     }
 
+    public static String valuesToString(int hour, int minute) {
+        return timeToString(hour, minute);
+    }
+
+    public static String valuesToString(int year, int month, int date, int hour, int minute) {
+        return valuesToString(year, month, date) + " " + valuesToString(hour, minute);
+    }
+
+    /***************************************转换成时间戳、时间戳/Date转换***********************************/
+
     /**
      * 散落的日期时间转换到具体的时间戳
      * @param year
@@ -235,6 +249,15 @@ public class DateTimeUtil {
         Date d = null;
         d = stringToDate(o, "yyyy-MM-dd HH:mm:ss");
         return d.getTime();
+    }
+
+    public static long valuesToTimestamp(int year, int month, int date, int hour, int minute, int second) {
+        return datetimeToTimestamp(year, month, date, hour, minute, second);
+    }
+
+    public static int valuesToTimestamp(int year, int month, int date, int hour, int minute) {
+        long timestamp = datetimeToTimestamp(year, month, date, hour, minute, 0);
+        return (int)(timestamp/1000);
     }
 
     public static String timestampToString(int timestamp, String formatType) {
