@@ -1,7 +1,7 @@
 package com.iwxyi.easymeeting.Globals;
 
 public class Paths {
-    public static final String NET_PATH = "http://iwxyi.com/easymeeting/public/index.php/android/Client/"; // 网络路径
+    public static final String NET_PATH = "http://iwxyi.com/thinkphp5/public/index.php/android/Client/"; // 网络路径
     public static final String DATA_PATH = "/EasyMeeting/";
     public static final String PC_IP = "192.168.43.135"; // 本机电脑IP，调试用 // 192.168.103.2 不知道为啥这个IP也可以诶？
     public static final String NETPATHD = "http://"+ NET_PATH +"/easymeeting/public/index.php/android/Client/"; // 调试
