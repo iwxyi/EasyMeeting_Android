@@ -7,7 +7,7 @@ public class Paths {
     public static final String NETPATHD = "http://"+ PCIP +"/easymeeting/public/index.php/android/Client/"; // 调试
 
     public static String getNetpath(String action) {
-        return NETPATHD + action;
+        return NETPATH + action;
     }
 
     public static String getNetpath(String action, String[] arg) {
