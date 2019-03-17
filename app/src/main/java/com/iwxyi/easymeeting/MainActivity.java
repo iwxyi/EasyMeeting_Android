@@ -254,6 +254,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CODE_LOGIN) { // 登录成功
+            if (!User.isLogin()) {
+                finish();
+                return ;
+            }
+
             if (leasesFragment != null) {
                 leasesFragment.refreshLeases();
             }
