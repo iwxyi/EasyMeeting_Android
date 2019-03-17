@@ -1,5 +1,7 @@
 package com.iwxyi.easymeeting.Globals;
 
+import android.widget.Toast;
+
 public class Paths {
     public static final String DATAPATH = "/EasyMeeting/";
     public static final String NETPATH = "http://iwxyi.com/thinkphp5/public/index.php/android/Client/"; // 网络路径

@@ -1,5 +1,11 @@
 package com.iwxyi.easymeeting.Utils;
 
+/**
+ * @Author: mrxy001
+ * @Time: 2019
+ * @Change: 2019.3.16
+ */
+
 import android.annotation.SuppressLint;
 
 import java.text.ParseException;
