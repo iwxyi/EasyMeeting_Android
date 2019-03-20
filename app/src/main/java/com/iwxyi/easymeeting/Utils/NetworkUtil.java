@@ -1,5 +1,7 @@
 package com.iwxyi.easymeeting.Utils;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;

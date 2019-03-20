@@ -29,7 +29,7 @@ public class DateTimeUtil {
      * @return 现行时间戳（13 位数，精确到毫秒）
      */
     public static long getMillisTimestamp() {
-        return System.currentTimeMillis();
+    return System.currentTimeMillis();
     }
 
     /********************************10位时间戳转具体数值**********************************/
