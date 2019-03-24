@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         mContentFl = (FrameLayout) findViewById(R.id.fl_content);
 
+
         // 抽屉头像
         View drawView = navigationView.getHeaderView(0);
         ImageView mHeadIv = (ImageView) drawView.findViewById(R.id.iv_avatar);

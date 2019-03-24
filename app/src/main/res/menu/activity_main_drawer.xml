@@ -5,6 +5,7 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:checked="true"
             android:id="@+id/my_leases"
             android:icon="@drawable/ic_menu_camera"
             android:title="我的租约" />

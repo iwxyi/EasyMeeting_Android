@@ -106,16 +106,23 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
 
     private void initData() {
         if (!isModify) { // 添加租约
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle("新增会议室租约");
+            }
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle("新增会议室租约");
             int time = getSuitableTime();
             start_time = time;
             finish_time = time + 7200;
             mFab.hide();
-        } else { // 格式化代码
+        } else {
             ActionBar actionBar = getActionBar();
             if (actionBar != null) {
                 actionBar.setTitle("编辑会议室租约");
             }
-
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle("编辑会议室租约");
             LeaseContent.LeaseItem item = LeaseContent.ITEM_MAP.get(lease_id);
             if (item == null) {
                 Toast.makeText(this, "未能获取到 lease_id", Toast.LENGTH_SHORT).show();

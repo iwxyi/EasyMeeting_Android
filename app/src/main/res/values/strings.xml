@@ -11,7 +11,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_add_lease">新增会议室租约</string>
+    <string name="title_activity_add_lease">租借会议室</string>
 
     <!--*************************设置Activity设置项************************-->
     <!-- Strings related to Settings -->
