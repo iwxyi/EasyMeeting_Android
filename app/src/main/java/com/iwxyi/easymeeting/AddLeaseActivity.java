@@ -1,5 +1,6 @@
 package com.iwxyi.easymeeting;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -110,6 +111,11 @@ public class AddLeaseActivity extends AppCompatActivity implements View.OnClickL
             finish_time = time + 7200;
             mFab.hide();
         } else { // 格式化代码
+            ActionBar actionBar = getActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle("编辑会议室租约");
+            }
+
             LeaseContent.LeaseItem item = LeaseContent.ITEM_MAP.get(lease_id);
             if (item == null) {
                 Toast.makeText(this, "未能获取到 lease_id", Toast.LENGTH_SHORT).show();
