@@ -193,9 +193,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction ft = fm.beginTransaction();
-        hideFragment(ft);
 
         if (id == R.id.my_leases) {
+            hideFragment(ft);
             if (leasesFragment == null) {
                 leasesFragment = new LeasesFragment();
                 ft.add(R.id.fl_content, leasesFragment, "leases");
@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity
             }
             drawerMenuIndex = 1;
         } else if (id == R.id.my_meeting) {
+            hideFragment(ft);
             if (meetingsFragment == null) {
                 meetingsFragment = new MeetingsFragment();
                 ft.add(R.id.fl_content, meetingsFragment, "meetings");
@@ -215,6 +216,7 @@ public class MainActivity extends AppCompatActivity
             }
             drawerMenuIndex = 2;
         } else if (id == R.id.join_meeting) {
+            hideFragment(ft);
             if (joinFragment == null) {
                 joinFragment = new JoinMeetingFragment();
                 ft.add(R.id.fl_content, joinFragment, "join");
@@ -223,11 +225,24 @@ public class MainActivity extends AppCompatActivity
             }
             drawerMenuIndex = 3;
         } else if (id == R.id.user_certif) {
+            hideFragment(ft);
             drawerMenuIndex = 4;
         } else if (id == R.id.nav_share) {
-
+            Intent intent = new Intent();
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "分享APP");
+            intent.putExtra(Intent.EXTRA_TEXT, "推荐您使用：EasyMeeting智能会议室管理系统");
+            intent = Intent.createChooser(intent, "分享APP给好友");
+            startActivity(intent);
+            return true;
         } else if (id == R.id.nav_send) {
-
+            Intent intent = new Intent();
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "会议邀请");
+            intent.putExtra(Intent.EXTRA_TEXT, "请选择要分享的好友");
+            intent = Intent.createChooser(intent, "邀请用户加入会议");
+            startActivity(intent);
+            return true;
         }
 
         ft.commit();
