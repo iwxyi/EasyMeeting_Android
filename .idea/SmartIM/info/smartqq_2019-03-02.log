@@ -1,0 +1,23 @@
+2019-03-02 19:30:47.604 [Thread-57] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 正在获取 uuid ... 
+2019-03-02 19:30:47.813 [Thread-57] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 正在获取二维码 ... 成功
+
+2019-03-02 19:30:48.889 [Thread-57] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 请使用微信扫描二维码以登录 ... 
+
+2019-03-02 19:30:53.602 [Thread-57] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 请在手机上点击确认以登录 ... 
+
+2019-03-02 19:30:55.000 [Thread-57] INFO  io.github.biezhi.wechat.api.WechatApi -
+				[*] 设置cookie [wxuin=1228521708;wxsid=U99T3SiHJeaT9AU5;wxloadtime=1551526254;mm_lang=zh_CN;webwx_data_ticket=gSeRq33njL6Gev1j31KGV0AC;webwxuvid=cdf24b3788ef10b9a29e9b2785a6a51290effadb15ae5731229fc7456ffbbd8c367708666c8deb5f3bb563bcc567570c;webwx_auth_ticket=CIsBEPT8z8AGGoAB74kG9hfuhbt57mQyLaEGiWFRLrmXFZa3C4nZP5u3QhFDuZ4r2sli9lp4dzBt7xUUYGLkyBraakM9s93tBzrGYFzjpZqbnGBpEG3DnpYzIWuJvQr3Tm5l+Z5UNUeMrAUKCIPKmppl+9Yyr40jp9Bqcxn0QrjTZXnF3GMfUbUFLyQ=;]
+2019-03-02 19:30:55.803 [Thread-58] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 开启状态通知 ... 
+2019-03-02 19:30:55.994 [Thread-58] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 获取联系人 ... 
+2019-03-02 19:31:00.579 [Thread-58] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 应有 [0] 个联系人，读取到联系人 [185] 个
+
+2019-03-02 19:31:00.579 [Thread-58] INFO  io.github.biezhi.wechat.api.WechatClient -
+				[*] 共有 [6] 个群 | [185] 个直接联系人 | [31] 个特殊账号 ｜ [48] 个公众号/服务号
+
